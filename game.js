@@ -37,24 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
     resizeCanvas();
 
 
-    var selfShip = {
-        x: 0,
-        y: 0,
-        vx: 0,
-        vy: 0,
-        size: 10,
-        mass: 1,
-
-        theta: Math.PI * 7 / 8,
-        omega: 0,
-
-        mu: 0.05,
-
-        thrust: 25,
-        agility: Math.PI * 2,
-
-        forces: []
-    };
+    var selfShip = new Ship();
     var selfId = addShip(game, selfShip);
     game.selfId = selfId;
 
