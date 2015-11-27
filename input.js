@@ -1,13 +1,13 @@
 
-function setupInputs(odb) {
+function setupInputs(game) {
     function doKeyDown(e) {
         var code = e.keyCode;
-        odb.keysPressed[code] = true;
+        game.keysPressed[code] = true;
     }
 
     function doKeyUp(e) {
         var code = e.keyCode;
-        odb.keysPressed[code] = false;
+        game.keysPressed[code] = false;
     }
 
     function doMouseDown(e) {
@@ -17,23 +17,23 @@ function setupInputs(odb) {
 
     document.addEventListener("keydown", doKeyDown, true);
     document.addEventListener("keyup", doKeyUp, true);
-    odb.canvas.addEventListener("mousedown", doMouseDown, true);
-    odb.canvas.addEventListener("mouseup", doMouseUp, true);
-    setupKeybindings(odb);
+    game.canvas.addEventListener("mousedown", doMouseDown, true);
+    game.canvas.addEventListener("mouseup", doMouseUp, true);
+    setupKeybindings(game);
 }
 
-function setupKeybindings(odb) {
-    var bindings = odb.keyBindings;
+function setupKeybindings(game) {
+    var bindings = game.keyBindings;
     bindings[KEY_LEFT] = function() {
-        turnLeft(odb.everyone[odb.selfId]);
+        turnLeft(game.everyone[game.selfId]);
     };
     bindings[KEY_UP] = function() {
-        increaseThrust(odb.everyone[odb.selfId]);
+        increaseThrust(game.everyone[game.selfId]);
     };
     bindings[KEY_RIGHT] = function() {
-        turnRight(odb.everyone[odb.selfId]);
+        turnRight(game.everyone[game.selfId]);
     };
     bindings[KEY_DOWN] = function() {
-        slowDown(odb.everyone[odb.selfId]);
+        slowDown(game.everyone[game.selfId]);
     };
 }

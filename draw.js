@@ -1,13 +1,13 @@
 
-function updateView(odb) {
-    var center = odb.view.center;
-    var zoom = odb.view.zoom;
-    var width = odb.canvas.width / zoom;
-    var height = odb.canvas.height / zoom;
+function updateView(game) {
+    var center = game.view.center;
+    var zoom = game.view.zoom;
+    var width = game.canvas.width / zoom;
+    var height = game.canvas.height / zoom;
     var quartX = width / 12;
     var quartY = height / 12;
 
-    var self = getSelf(odb);
+    var self = getSelf(game);
     if (self.x < (center.x - quartX)) {
         center.x = self.x + quartX;
     } else if (self.x > (center.x + quartX)) {
@@ -20,28 +20,34 @@ function updateView(odb) {
     }
 }
 
-function drawAll(odb) {
-    odb.context.clearRect(-odb.canvas.width / 2,-odb.canvas.height / 2, odb.canvas.width, odb.canvas.height);
-    for (var key in odb.everyone) {
-        draw(odb, odb.everyone[key], odb.context, odb.view);
+function drawAll(game) {
+    game.context.clearRect(-game.canvas.width / 2,
+        -game.canvas.height / 2,
+        game.canvas.width,
+        game.canvas.height);
+    for (var key in game.everyone) {
+        draw(game, game.everyone[key], game.context, game.view);
     }
-    drawSegments(odb);
+    drawSegments(game);
 }
 
-function drawSegments(odb, segments) {
-    var spacing = odb.view.spacing;
-    var bigSpacing = odb.view.bigSpacing;
-    var gridSize = odb.view.gridSize;
-    var zoom = odb.view.zoom;
-    var startx = Math.floor(odb.view.center.x / spacing) * spacing;
-    var starty = Math.floor(odb.view.center.y / spacing) * spacing;
+function drawSegments(game, segments) {
+    var spacing = game.view.spacing;
+    var bigSpacing = game.view.bigSpacing;
+    var gridSize = game.view.gridSize;
+    var zoom = game.view.zoom;
+    var startx = Math.floor(game.view.center.x / spacing) * spacing;
+    var starty = Math.floor(game.view.center.y / spacing) * spacing;
 
-    var offx = Math.floor(odb.canvas.width / (zoom * 2) / spacing) * spacing;
-    var offy = Math.floor(odb.canvas.height / (zoom * 2) / spacing) * spacing;
+    var offx = Math.floor(game.canvas.width / (zoom * 2) / spacing) * spacing;
+    var offy = Math.floor(game.canvas.height / (zoom * 2) / spacing) * spacing;
 
-    for (var i = startx - offx; i <= startx + offx + spacing; i += spacing) {
-        for (var j = starty - offy; j <= starty + offy + spacing; j += spacing) {
-            var pt = project(odb, vector(Math.floor(i / spacing) * spacing,
+    var endx = startx + offx + spacing;
+    var endy = starty + offy + spacing;
+
+    for (var i = startx - offx; i <= endx; i += spacing) {
+        for (var j = starty - offy; j <= endy; j += spacing) {
+            var pt = project(game, vector(Math.floor(i / spacing) * spacing,
                 Math.floor(j / spacing) * spacing));
             var path = new Path2D();
             var siz = gridSize * zoom;
@@ -52,12 +58,12 @@ function drawSegments(odb, segments) {
             path.lineTo(pt.x + siz, pt.y);
             path.moveTo(pt.x, pt.y - siz);
             path.lineTo(pt.x, pt.y + siz);
-            odb.context.stroke(path);
+            game.context.stroke(path);
         }
     }
 }
 
-function draw(odb, ob, context, view) {
+function draw(game, ob, context, view) {
     var siz = ob.size;
     var path = new Path2D();
 
@@ -68,9 +74,9 @@ function draw(odb, ob, context, view) {
     var p3 = vector(ob.x + siz * Math.cos(ob.theta - 5 * Math.PI / 6),
         ob.y + siz * Math.sin(ob.theta - 5 * Math.PI / 6));
 
-    p1 = project(odb, p1);
-    p2 = project(odb, p2);
-    p3 = project(odb, p3);
+    p1 = project(game, p1);
+    p2 = project(game, p2);
+    p3 = project(game, p3);
 
     path.moveTo(Math.floor(p1.x), Math.floor(p1.y));
     path.lineTo(Math.floor(p2.x), Math.floor(p2.y));
@@ -79,11 +85,11 @@ function draw(odb, ob, context, view) {
     context.stroke(path);
 }
 
-function project(odb, vec) {
-    var width = odb.canvas.width;
-    var height = odb.canvas.height;
-    var zoom = odb.view.zoom;
-    var center = odb.view.center;
+function project(game, vec) {
+    var width = game.canvas.width;
+    var height = game.canvas.height;
+    var zoom = game.view.zoom;
+    var center = game.view.center;
     var x = (vec.x - center.x) * zoom;
     var y = (vec.y - center.y) * zoom;
     return vector(Math.floor(x), Math.floor(y));

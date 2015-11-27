@@ -6,7 +6,7 @@ var KEY_DOWN = 40;
 
 var epsilon = 0.000001;
 
-function makeOdb() {
+function makeGame() {
     return {
         everyone: {
         },
@@ -28,8 +28,8 @@ function makeOdb() {
     };
 }
 
-function getSelf(odb) {
-    return odb.everyone[odb.selfId];
+function getSelf(game) {
+    return game.everyone[game.selfId];
 }
 
 function makeGuid() {

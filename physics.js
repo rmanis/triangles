@@ -1,10 +1,10 @@
 
-function updateForces(odb, dt) {
-    var ship = odb.everyone[odb.selfId];
-    var keys = odb.keysPressed;
+function updateForces(game, dt) {
+    var ship = game.everyone[game.selfId];
+    var keys = game.keysPressed;
 
     for (var key in keys) {
-        var binding = odb.keyBindings[key];
+        var binding = game.keyBindings[key];
         if (keys[key] && binding) {
             binding();
         }
@@ -14,9 +14,9 @@ function updateForces(odb, dt) {
     ship.omega = 0;
 }
 
-function updatePos(odb, dt) {
-    for (var key in odb.everyone) {
-        var o = odb.everyone[key];
+function updatePos(game, dt) {
+    for (var key in game.everyone) {
+        var o = game.everyone[key];
         o.x += o.vx * dt;
         o.y += o.vy * dt;
     }
@@ -41,9 +41,9 @@ function sumForces(forces) {
     return vector(x, y);
 }
 
-function updateVel(odb, dt) {
-    for (var key in odb.everyone) {
-        var ship = odb.everyone[key];
+function updateVel(game, dt) {
+    for (var key in game.everyone) {
+        var ship = game.everyone[key];
         var frictionalForce = friction(ship);
         var sum = sumForces(ship.forces.concat([frictionalForce]));
         ship.vx += sum.x * ship.mass;

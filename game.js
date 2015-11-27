@@ -1,37 +1,37 @@
 
-function addShip(odb, ship) {
+function addShip(game, ship) {
     var id = makeGuid();
-    odb.everyone[id] = ship;
+    game.everyone[id] = ship;
     return id;
 }
 
-function loop(odb, arg) {
-    var dt = (arg - odb.lastUpdate) / 1000;
-    odb.lastUpdate = arg;
-    updateForces(odb, dt);
-    updateVel(odb, dt);
-    updatePos(odb, dt);
-    updateView(odb);
-    drawAll(odb, dt);
+function loop(game, arg) {
+    var dt = (arg - game.lastUpdate) / 1000;
+    game.lastUpdate = arg;
+    updateForces(game, dt);
+    updateVel(game, dt);
+    updatePos(game, dt);
+    updateView(game);
+    drawAll(game, dt);
 
     requestAnimationFrame(function(arg) {
-        loop(odb, arg);
+        loop(game, arg);
     });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    var odb = makeOdb();
-    odb.canvas = document.getElementById("can");
-    odb.context = odb.canvas.getContext("2d");
-    odb.context.save();
+    var game = makeGame();
+    game.canvas = document.getElementById("can");
+    game.context = game.canvas.getContext("2d");
+    game.context.save();
 
     function resizeCanvas() {
-        odb.context.restore();
-        odb.canvas.width = window.innerWidth;
-        odb.canvas.height = window.innerHeight;
-        odb.context.save();
-        odb.context.translate(odb.canvas.width / 2,
-            odb.canvas.height / 2);
+        game.context.restore();
+        game.canvas.width = window.innerWidth;
+        game.canvas.height = window.innerHeight;
+        game.context.save();
+        game.context.translate(game.canvas.width / 2,
+            game.canvas.height / 2);
     };
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
@@ -55,13 +55,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         forces: []
     };
-    var selfId = addShip(odb, selfShip);
-    odb.selfId = selfId;
+    var selfId = addShip(game, selfShip);
+    game.selfId = selfId;
 
-    setupInputs(odb);
-    window.odb = odb;
+    setupInputs(game);
+    window.game = game;
     requestAnimationFrame(function(arg) {
-        loop(odb, arg);
-    }, odb);
+        loop(game, arg);
+    }, game);
 }, false);
 
