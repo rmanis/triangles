@@ -95,3 +95,13 @@ function project(game, vec) {
     var y = (vec.y - center.y) * zoom;
     return vector(Math.floor(x), Math.floor(y));
 }
+
+// Project a point from screen space to game space
+function unproject(game, vec) {
+    var width = game.canvas.width;
+    var height = game.canvas.height;
+    var center = game.view.center;
+    var dx = (vec.x - width / 2) / game.view.zoom;
+    var dy = (vec.y - height / 2) / game.view.zoom;
+    return vector(dx + center.x, dy + center.y);
+}
