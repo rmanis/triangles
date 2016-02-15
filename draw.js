@@ -7,7 +7,7 @@ function updateView(game) {
     var quartX = width / 12;
     var quartY = height / 12;
 
-    var self = getSelf(game);
+    var self = game.getSelf();
     if (self.x < (center.x - quartX)) {
         center.x = self.x + quartX;
     } else if (self.x > (center.x + quartX)) {
