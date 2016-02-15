@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function debug(text) {
     var deb = document.getElementById('debug');
-    var p = document.createElement('p');
+    var p = document.createElement('pre');
     p.textContent = text;
     deb.appendChild(p);
+    deb.scrollTop = deb.scrollHeight;
 }
