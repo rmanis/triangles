@@ -1,14 +1,6 @@
 
 function updateForces(game, dt) {
     var ship = game.everyone[game.selfId];
-    var keys = game.keysPressed;
-
-    for (var key in keys) {
-        var binding = game.keyBindings[key];
-        if (keys[key] && binding) {
-            binding();
-        }
-    }
 
     ship.theta += ship.omega * dt;
     ship.omega = 0;

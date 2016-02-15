@@ -18,15 +18,8 @@ var Game = function() {
     // The timestamp of the last game update
     this.lastUpdate = 0;
 
-    // Keys on the keyboard being pressed
-    // Key: keycode for a key being pressed
-    // Value: true or false
-    this.keysPressed = {};
-
-    // Keybindings, functions mapped to keys
-    // Key: keycode
-    // Value: function for that key
-    this.keyBindings = {};
+    // The input handler
+    this.inputHandler = null;
 
     // The game view
     this.view = new View();
@@ -36,6 +29,9 @@ Game.prototype.initialize = function() {
     this.canvas = document.getElementById("can");
     this.context = this.canvas.getContext("2d");
     this.context.save();
+
+    this.inputHandler = new InputHandler(this);
+    this.inputHandler.initialize();
 };
 
 Game.prototype.resizeCanvas = function() {
@@ -50,6 +46,7 @@ Game.prototype.resizeCanvas = function() {
 Game.prototype.loop = function(arg) {
     var dt = (arg - this.lastUpdate) / 1000;
     this.lastUpdate = arg;
+    this.inputHandler.update();
     updateForces(this, dt);
     updateVel(this, dt);
     updatePos(this, dt);

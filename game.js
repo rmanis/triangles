@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
     var selfShip = new Ship();
     game.selfId = game.addShip(selfShip);
 
-    setupInputs(game);
     window.game = game;
     requestAnimationFrame(game.loop.bind(game));
 }, false);
