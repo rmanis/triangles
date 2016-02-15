@@ -1,10 +1,4 @@
 
-function addShip(game, ship) {
-    var id = makeGuid();
-    game.everyone[id] = ship;
-    return id;
-}
-
 document.addEventListener('DOMContentLoaded', function() {
     var game = new Game();
     game.initialize();
@@ -13,8 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     game.resizeCanvas();
 
     var selfShip = new Ship();
-    var selfId = addShip(game, selfShip);
-    game.selfId = selfId;
+    game.selfId = game.addShip(selfShip);
 
     setupInputs(game);
     window.game = game;

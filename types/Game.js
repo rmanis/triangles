@@ -37,6 +37,12 @@ Game.prototype.loop = function(arg) {
     requestAnimationFrame(this.loop.bind(this));
 };
 
+Game.prototype.addShip = function(ship) {
+    var id = makeGuid();
+    this.everyone[id] = ship;
+    return id;
+};
+
 Game.prototype.getSelf = function() {
     return this.everyone[this.selfId];
 };
