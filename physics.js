@@ -52,25 +52,3 @@ function updateVel(game, dt) {
     }
 }
 
-function addForce(ship, force) {
-    ship.forces.push(force);
-}
-
-function turnLeft(ship) {
-    ship.omega = -ship.agility;
-}
-
-function increaseThrust(ship) {
-    addForce(ship, vector(
-        ship.thrust * Math.cos(ship.theta),
-        ship.thrust * Math.sin(ship.theta)
-    ));
-}
-
-function turnRight(ship) {
-    ship.omega = ship.agility;
-}
-
-function slowDown(ship) {
-}
-

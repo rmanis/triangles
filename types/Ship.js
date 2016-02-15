@@ -24,3 +24,25 @@ var Ship = function(attr) {
     }
 };
 
+Ship.prototype.addForce = function(force) {
+    this.forces.push(force);
+}
+
+Ship.prototype.turnLeft = function() {
+    this.omega = -this.agility;
+}
+
+Ship.prototype.increaseThrust = function() {
+    this.addForce(vector(
+        this.thrust * Math.cos(this.theta),
+        this.thrust * Math.sin(this.theta)
+    ));
+}
+
+Ship.prototype.turnRight = function() {
+    this.omega = this.agility;
+}
+
+Ship.prototype.slowDown = function() {
+}
+

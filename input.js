@@ -46,18 +46,12 @@ InputHandler.prototype.setupInputs = function() {
 
 InputHandler.prototype.setupKeybindings = function() {
     var bindings = this.keyBindings;
-    bindings[KEY_LEFT] = function() {
-        turnLeft(this.game.getSelf());
-    };
-    bindings[KEY_UP] = function() {
-        increaseThrust(this.game.getSelf());
-    };
-    bindings[KEY_RIGHT] = function() {
-        turnRight(this.game.getSelf());
-    };
-    bindings[KEY_DOWN] = function() {
-        slowDown(this.game.getSelf());
-    };
+    var mySelf = this.game.getSelf();
+
+    bindings[KEY_LEFT] = mySelf.turnLeft.bind(mySelf);
+    bindings[KEY_UP] = mySelf.increaseThrust.bind(mySelf);
+    bindings[KEY_RIGHT] = mySelf.turnRight.bind(mySelf);
+    bindings[KEY_DOWN] = mySelf.slowDown.bind(mySelf);
 }
 
 InputHandler.prototype.update = function() {
