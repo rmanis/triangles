@@ -7,9 +7,21 @@
         width: 100%;
       }
       canvas { display: block; }
+
+      #debug {
+        position: absolute;
+        left: 20px;
+        top: 20px;
+        width: 320px;
+        height: 10em;
+        background-color: whitesmoke;
+        border: 1px solid black;
+        overflow: scroll;
+      }
     </style>
   </head>
   <body>
+    <div id="debug"></div>
     <canvas id="can" width="640px" height="480px"></canvas>
     <script src="types/View.js"></script>
     <script src="types/Game.js"></script>

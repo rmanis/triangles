@@ -9,5 +9,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.game = game;
     requestAnimationFrame(game.loop.bind(game));
+    debug("Started");
 }, false);
 
+function debug(text) {
+    var deb = document.getElementById('debug');
+    var p = document.createElement('p');
+    p.textContent = text;
+    deb.appendChild(p);
+}
