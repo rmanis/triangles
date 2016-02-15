@@ -85,6 +85,7 @@ function draw(game, ob, context, view) {
     context.stroke(path);
 }
 
+// Project a point (`vec`) from game space to screen space
 function project(game, vec) {
     var width = game.canvas.width;
     var height = game.canvas.height;
