@@ -30,6 +30,9 @@ Game.prototype.initialize = function() {
     this.context = this.canvas.getContext("2d");
     this.context.save();
 
+    window.addEventListener('resize', this.resizeCanvas.bind(this));
+    this.resizeCanvas();
+
     this.inputHandler = new InputHandler(this);
     this.inputHandler.initialize();
 };
