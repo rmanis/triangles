@@ -1,12 +1,34 @@
 
 var Game = function() {
+
+    // All the ships in the game.
+    // Key is the user id
+    // Value is their ship
     this.everyone = {};
+
+    // This player's user id
     this.selfId = null;
+
+    // Canvas object on the page
     this.canvas = null;
+
+    // Context object in the canvas
     this.context = null;
+
+    // The timestamp of the last game update
     this.lastUpdate = 0;
+
+    // Keys on the keyboard being pressed
+    // Key: keycode for a key being pressed
+    // Value: true or false
     this.keysPressed = {};
+
+    // Keybindings, functions mapped to keys
+    // Key: keycode
+    // Value: function for that key
     this.keyBindings = {};
+
+    // The game view
     this.view = new View();
 };
 
