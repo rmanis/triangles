@@ -2,7 +2,13 @@
 function updateForces(game, dt) {
     var ship = game.everyone[game.selfId];
 
-    ship.theta += ship.omega * dt;
+    var theta = ship.theta + ship.omega * dt;
+
+    if (theta < 0 || theta > TWO_PI) {
+        theta = (TWO_PI + theta) % TWO_PI;
+    }
+
+    ship.theta = theta;
     ship.omega = 0;
 }
 
