@@ -4,6 +4,8 @@ var KEY_UP = 38
 var KEY_RIGHT = 39;
 var KEY_DOWN = 40;
 
+var TWO_PI = 2 * Math.PI;
+
 var epsilon = 0.000001;
 
 function makeGuid() {
