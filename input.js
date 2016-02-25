@@ -41,26 +41,49 @@ InputHandler.prototype.setupInputs = function() {
 
     var mouseMove = doMouseMove.bind(this);
 
-    function doMouseDown(e) {
+    function doTouchMove(e) {
+        doMouseMove({ x : e.touches[0].clientX, y : e.touches[0].clientY });
+    }
+
+    var touchMove = doTouchMove.bind(this);
+
+    function pointStart(e) {
         var p = vector(e.x, e.y);
         var s = this.game.getSelf();
         var f = s.seekPoint.bind(s);
         s.addFact('seekpoint', p);
         s.addFact('seekfunc', f);
         s.addTicker(f);
+    }
 
+    function pointEnd(e) {
+        var ship = this.game.getSelf();
+        var seeker = ship.removeFact('seekfunc');
+        ship.removeTicker(seeker);
+        ship.removeFact('seekpoint');
+    }
+
+    function doMouseDown(e) {
+        pointStart(e);
         this.game.canvas.addEventListener("mousemove", mouseMove);
         e.stopPropagation();
     }
 
     function doMouseUp(e) {
-        var ship = this.game.getSelf();
-        var seeker = ship.removeFact('seekfunc');
-        ship.removeTicker(seeker);
-
-        ship.removeFact('seekpoint');
-
+        pointEnd(e);
         this.game.canvas.removeEventListener("mousemove", mouseMove);
+        e.stopPropagation();
+    }
+
+    function doTouchStart(e) {
+        pointStart({ x : e.touches[0].clientX, y : e.touches[0].clientY });
+        this.game.canvas.addEventListener("touchmove", touchMove);
+        e.stopPropagation();
+    }
+
+    function doTouchEnd(e) {
+        pointEnd({x: e.touches[0].x, y : e.touches[0].y});
+        this.game.canvas.removeEventListener("touchmove", touchMove);
         e.stopPropagation();
     }
 
@@ -70,6 +93,11 @@ InputHandler.prototype.setupInputs = function() {
         doMouseDown.bind(this), true);
     this.game.canvas.addEventListener("mouseup",
         doMouseUp.bind(this), true);
+
+    this.game.canvas.addEventListener("touchstart",
+        doTouchStart.bind(this), true);
+    this.game.canvas.addEventListener("touchend",
+        doTouchEnd.bind(this), true);
 }
 
 InputHandler.prototype.setupKeybindings = function() {
