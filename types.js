@@ -49,6 +49,12 @@ Vector.prototype.dot = function(v) {
     return this.x * v.x + this.y * v.y;
 }
 
+// Calculates the z component of the 2d cross product of
+// this and vector v
+Vector.prototype.zcross = function(v) {
+    return this.x * v.y - this.y * v.x;
+}
+
 // Project this onto vector v
 // a * ((a . b) / (|a| ** 2))
 Vector.prototype.project = function(v) {
@@ -59,8 +65,12 @@ Vector.prototype.project = function(v) {
 
 // v.dot(w) = v.length * w.length * cos(angle)
 Vector.prototype.angleTo = function(v) {
-    var num = this.dot(v) / (this.length() * v.length())
+    var num = this.dot(v) / (this.length() * v.length());
     return Math.acos(num);
+}
+
+Vector.prototype.toString = function() {
+    return "(" + this.x + ", " + this.y + ")";
 }
 
 function vector(x, y) {

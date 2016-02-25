@@ -21,6 +21,7 @@ InputHandler.prototype.initialize = function() {
 }
 
 InputHandler.prototype.setupInputs = function() {
+
     function doKeyDown(e) {
         var code = e.keyCode;
         this.keysPressed[code] = true;
@@ -31,9 +32,36 @@ InputHandler.prototype.setupInputs = function() {
         this.keysPressed[code] = false;
     }
 
-    function doMouseDown(e) {
+    function doMouseMove(e) {
+        var s = this.game.getSelf();
+        var p = new Vector(e.x, e.y);
+        s.addFact('seekpoint', p);
+        e.stopPropagation();
     }
+
+    var mouseMove = doMouseMove.bind(this);
+
+    function doMouseDown(e) {
+        var p = vector(e.x, e.y);
+        var s = this.game.getSelf();
+        var f = s.seekPoint.bind(s);
+        s.addFact('seekpoint', p);
+        s.addFact('seekfunc', f);
+        s.addTicker(f);
+
+        this.game.canvas.addEventListener("mousemove", mouseMove);
+        e.stopPropagation();
+    }
+
     function doMouseUp(e) {
+        var ship = this.game.getSelf();
+        var seeker = ship.removeFact('seekfunc');
+        ship.removeTicker(seeker);
+
+        ship.removeFact('seekpoint');
+
+        this.game.canvas.removeEventListener("mousemove", mouseMove);
+        e.stopPropagation();
     }
 
     document.addEventListener("keydown", doKeyDown.bind(this), true);
