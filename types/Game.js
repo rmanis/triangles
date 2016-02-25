@@ -30,6 +30,8 @@ Game.prototype.initialize = function() {
     this.context = this.canvas.getContext("2d");
     this.context.save();
 
+    this.canvas.onselectstart = function() { return false; };
+
     window.addEventListener('resize', this.resizeCanvas.bind(this));
     this.resizeCanvas();
 

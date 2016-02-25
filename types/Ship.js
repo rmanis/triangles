@@ -106,7 +106,10 @@ Ship.prototype.turnLeft = function(omega) {
 }
 
 Ship.prototype.increaseThrust = function(multiplier) {
-    var m = multiplier || 1.0;
+    var m = Math.abs(multiplier || 1.0);
+    if (m > 1) {
+        m = 1;
+    }
     this.addForce(vector(
         m * this.thrust * Math.cos(this.theta),
         m * this.thrust * Math.sin(this.theta)
@@ -129,13 +132,11 @@ Ship.prototype.seekPoint = function(dt) {
 
     var heading = this.headingTo(v);
     if (heading < 0) {
-        this.turnLeft();
+        this.turnLeft(Math.abs(heading) * 50);
     } if (heading > 0) {
-        this.turnRight();
+        this.turnRight(Math.abs(heading) * 50);
     }
 
-    var dirVec = new Vector(Math.cos(this.theta), Math.sin(this.theta));
-    var projection = dirVec.project(v);
-    var magnitude = projection.length();
+    this.increaseThrust(heading ? 1 / heading : heading);
 }
 
