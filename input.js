@@ -98,6 +98,8 @@ InputHandler.prototype.setupInputs = function() {
         doTouchStart.bind(this), true);
     this.game.canvas.addEventListener("touchend",
         doTouchEnd.bind(this), true);
+    this.game.canvas.addEventListener("touchcancel",
+        doTouchEnd.bind(this), true);
 }
 
 InputHandler.prototype.setupKeybindings = function() {
