@@ -39,6 +39,13 @@ var Ship = function(attr) {
     }
 };
 
+Ship.prototype.update = function(dt) {
+    for (var t in this.tickers) {
+        var ticker = this.tickers[t];
+        ticker(dt);
+    }
+}
+
 // Returns a vector representing the ship's heading.
 Ship.prototype.headingVector = function() {
     return new Vector(Math.cos(this.theta), Math.sin(this.theta));

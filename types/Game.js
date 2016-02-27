@@ -52,6 +52,7 @@ Game.prototype.loop = function(arg) {
     var dt = (arg - this.lastUpdate) / 1000;
     this.lastUpdate = arg;
     this.inputHandler.update();
+    this.updateEveryone(dt);
     updateForces(this, dt);
     updateVel(this, dt);
     updatePos(this, dt);
@@ -60,6 +61,13 @@ Game.prototype.loop = function(arg) {
 
     requestAnimationFrame(this.loop.bind(this));
 };
+
+Game.prototype.updateEveryone = function(dt) {
+    for (var k in this.everyone) {
+        var o = this.everyone[k];
+        o.update(dt);
+    }
+}
 
 Game.prototype.addShip = function(ship) {
     var id = makeGuid();
