@@ -44,12 +44,12 @@ Ship.prototype.update = function(dt) {
         var ticker = this.tickers[t];
         ticker(dt);
     }
-}
+};
 
 // Returns a vector representing the ship's heading.
 Ship.prototype.headingVector = function() {
     return new Vector(Math.cos(this.theta), Math.sin(this.theta));
-}
+};
 
 // Computes the relative heading to a point in space.
 Ship.prototype.headingTo = function(vec) {
@@ -58,37 +58,37 @@ Ship.prototype.headingTo = function(vec) {
     var ang = heading.angleTo(dif);
 
     return ang * Math.sign(heading.zcross(dif));
-}
+};
 
 Ship.prototype.addForce = function(force) {
     this.forces.push(force);
-}
+};
 
 Ship.prototype.addTicker = function(ticker) {
     this.tickers.push(ticker);
-}
+};
 
 Ship.prototype.removeTicker = function(ticker) {
     var i = this.tickers.indexOf(ticker);
     if (i >= 0) {
         this.tickers.splice(i, 1);
     }
-}
+};
 
 Ship.prototype.addFact = function(k, v) {
     this.facts[k] = v;
-}
+};
 
 Ship.prototype.getFact = function(k) {
     return this.facts[k];
-}
+};
 
 Ship.prototype.removeFact = function(k) {
     var f = this.facts[k];
     delete this.facts[k];
 
     return f;
-}
+};
 
 Ship.prototype.agilityCheck = function(omega) {
     if (omega === undefined) {
@@ -106,11 +106,11 @@ Ship.prototype.agilityCheck = function(omega) {
         }
     }
     return amount;
-}
+};
 
 Ship.prototype.turnLeft = function(omega) {
     this.omega = -this.agilityCheck(omega);
-}
+};
 
 Ship.prototype.increaseThrust = function(multiplier) {
     var m = Math.abs(multiplier || 1.0);
@@ -121,14 +121,14 @@ Ship.prototype.increaseThrust = function(multiplier) {
         m * this.thrust * Math.cos(this.theta),
         m * this.thrust * Math.sin(this.theta)
     ));
-}
+};
 
 Ship.prototype.turnRight = function(omega) {
     this.omega = this.agilityCheck(omega);
-}
+};
 
 Ship.prototype.slowDown = function() {
-}
+};
 
 Ship.prototype.seekPoint = function(dt) {
     var target = this.getFact('seekpoint');
@@ -145,5 +145,5 @@ Ship.prototype.seekPoint = function(dt) {
     }
 
     this.increaseThrust(heading ? 1 / heading : heading);
-}
+};
 

@@ -67,7 +67,7 @@ Game.prototype.updateEveryone = function(dt) {
         var o = this.everyone[k];
         o.update(dt);
     }
-}
+};
 
 Game.prototype.addShip = function(ship) {
     var id = makeGuid();

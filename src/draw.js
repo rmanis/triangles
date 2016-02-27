@@ -51,7 +51,7 @@ function drawSegments(game, segments) {
                 Math.floor(j / spacing) * spacing));
             var path = new Path2D();
             var siz = gridSize * zoom;
-            if (i % bigSpacing == 0 && j % bigSpacing == 0) {
+            if (i % bigSpacing === 0 && j % bigSpacing === 0) {
                 siz *= 2;
             }
             path.moveTo(pt.x - siz, pt.y);

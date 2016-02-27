@@ -18,7 +18,7 @@ var InputHandler = function(game) {
 InputHandler.prototype.initialize = function() {
     this.setupInputs();
     this.setupKeybindings();
-}
+};
 
 InputHandler.prototype.setupInputs = function() {
 
@@ -100,7 +100,7 @@ InputHandler.prototype.setupInputs = function() {
         doTouchEnd.bind(this), true);
     this.game.canvas.addEventListener("touchcancel",
         doTouchEnd.bind(this), true);
-}
+};
 
 InputHandler.prototype.setupKeybindings = function() {
     var bindings = this.keyBindings;
@@ -110,7 +110,7 @@ InputHandler.prototype.setupKeybindings = function() {
     bindings[KEY_UP] = mySelf.increaseThrust.bind(mySelf);
     bindings[KEY_RIGHT] = mySelf.turnRight.bind(mySelf);
     bindings[KEY_DOWN] = mySelf.slowDown.bind(mySelf);
-}
+};
 
 InputHandler.prototype.update = function() {
     for (var key in this.keysPressed) {
@@ -119,4 +119,4 @@ InputHandler.prototype.update = function() {
             binding();
         }
     }
-}
+};
