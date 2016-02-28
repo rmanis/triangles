@@ -3,6 +3,7 @@
 .LSOverride
 
 node_modules
+build
 
 # Icon must end with two \r
 Icon
