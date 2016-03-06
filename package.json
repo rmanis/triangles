@@ -2,7 +2,12 @@
   "name": "triangles",
   "description": "A space game.",
   "version": "0.1.0",
-  "keywords": ["game", "space", "triangle", "triangles"],
+  "keywords": [
+    "game",
+    "space",
+    "triangle",
+    "triangles"
+  ],
   "homepage": "http://fishion.org/triangles/",
   "author": "Richie Manis <richie.manis@gmail.com> (http://fishion.org)",
   "devDependencies": {
@@ -10,6 +15,8 @@
     "grunt-contrib-copy": "^0.8.2",
     "grunt-contrib-jshint": "~0.10.0",
     "grunt-contrib-nodeunit": "~0.4.1",
-    "grunt-contrib-uglify": "~0.5.0"
+    "grunt-contrib-qunit": "^1.0.1",
+    "grunt-contrib-uglify": "~0.5.0",
+    "qunitjs": "^1.22.0"
   }
 }

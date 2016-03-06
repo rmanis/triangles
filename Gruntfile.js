@@ -11,7 +11,7 @@ module.exports = function(grunt) {
         },
 
         jshint : {
-            all : ['Gruntfile.js', 'src/**/*.js']
+            all : ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js']
         },
 
         uglify : {
@@ -30,6 +30,10 @@ module.exports = function(grunt) {
                 src : 'src/server/**/*.js',
                 dest: 'build/server.min.js'
             }
+        },
+
+        qunit : {
+            all : ['test/**/*.html']
         }
 
     });
@@ -37,6 +41,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-qunit');
 
-    grunt.registerTask('default', ['jshint', 'uglify', 'copy']);
+    grunt.registerTask('default', ['jshint', 'uglify', 'qunit', 'copy']);
 };
