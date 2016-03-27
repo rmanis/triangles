@@ -1,25 +1,4 @@
 
-function updateView(game) {
-    var center = game.view.center;
-    var zoom = game.view.zoom;
-    var width = game.canvas.width / zoom;
-    var height = game.canvas.height / zoom;
-    var quartX = width / 12;
-    var quartY = height / 12;
-
-    var self = game.getSelf();
-    if (self.x < (center.x - quartX)) {
-        center.x = self.x + quartX;
-    } else if (self.x > (center.x + quartX)) {
-        center.x = self.x - quartX;
-    }
-    if (self.y < (center.y - quartY)) {
-        center.y = self.y + quartY;
-    } else if (self.y > (center.y + quartY)) {
-        center.y = self.y - quartY;
-    }
-}
-
 function drawAll(game) {
     game.context.clearRect(-game.canvas.width / 2,
         -game.canvas.height / 2,

@@ -22,7 +22,7 @@ var Game = function() {
     this.inputHandler = null;
 
     // The game view
-    this.view = new View();
+    this.view = new View(this);
 };
 
 Game.prototype.initialize = function() {
@@ -56,7 +56,7 @@ Game.prototype.loop = function(arg) {
     updateForces(this, dt);
     updateVel(this, dt);
     updatePos(this, dt);
-    updateView(this);
+    this.view.update();
     drawAll(this, dt);
 
     requestAnimationFrame(this.loop.bind(this));
