@@ -29,3 +29,28 @@ View.prototype.update = function() {
         center.y = self.y - quartY;
     }
 };
+
+//
+// Project a point (`vec`) from game space to screen space
+//
+View.prototype.project = function(vec) {
+    var width = this.game.canvas.width;
+    var height = this.game.canvas.height;
+    var zoom = this.game.view.zoom;
+    var center = this.game.view.center;
+    var x = (vec.x - center.x) * zoom;
+    var y = (vec.y - center.y) * zoom;
+    return vector(Math.floor(x), Math.floor(y));
+};
+
+//
+// Project a point from screen space to game space
+//
+View.prototype.unproject = function(vec) {
+    var width = this.game.canvas.width;
+    var height = this.game.canvas.height;
+    var center = this.game.view.center;
+    var dx = (vec.x - width / 2) / game.view.zoom;
+    var dy = (vec.y - height / 2) / game.view.zoom;
+    return vector(dx + center.x, dy + center.y);
+};

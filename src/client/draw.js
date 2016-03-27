@@ -10,7 +10,7 @@ function drawAll(game) {
     drawSegments(game);
 }
 
-function drawSegments(game, segments) {
+function drawSegments(game) {
     var spacing = game.view.spacing;
     var bigSpacing = game.view.bigSpacing;
     var gridSize = game.view.gridSize;
@@ -26,7 +26,7 @@ function drawSegments(game, segments) {
 
     for (var i = startx - offx; i <= endx; i += spacing) {
         for (var j = starty - offy; j <= endy; j += spacing) {
-            var pt = project(game, vector(Math.floor(i / spacing) * spacing,
+            var pt = game.view.project(vector(Math.floor(i / spacing) * spacing,
                 Math.floor(j / spacing) * spacing));
             var path = new Path2D();
             var siz = gridSize * zoom;
@@ -53,9 +53,9 @@ function draw(game, ob, context, view) {
     var p3 = vector(ob.x + siz * Math.cos(ob.theta - 5 * Math.PI / 6),
         ob.y + siz * Math.sin(ob.theta - 5 * Math.PI / 6));
 
-    p1 = project(game, p1);
-    p2 = project(game, p2);
-    p3 = project(game, p3);
+    p1 = game.view.project(p1);
+    p2 = game.view.project(p2);
+    p3 = game.view.project(p3);
 
     path.moveTo(Math.floor(p1.x), Math.floor(p1.y));
     path.lineTo(Math.floor(p2.x), Math.floor(p2.y));
@@ -64,23 +64,3 @@ function draw(game, ob, context, view) {
     context.stroke(path);
 }
 
-// Project a point (`vec`) from game space to screen space
-function project(game, vec) {
-    var width = game.canvas.width;
-    var height = game.canvas.height;
-    var zoom = game.view.zoom;
-    var center = game.view.center;
-    var x = (vec.x - center.x) * zoom;
-    var y = (vec.y - center.y) * zoom;
-    return vector(Math.floor(x), Math.floor(y));
-}
-
-// Project a point from screen space to game space
-function unproject(game, vec) {
-    var width = game.canvas.width;
-    var height = game.canvas.height;
-    var center = game.view.center;
-    var dx = (vec.x - width / 2) / game.view.zoom;
-    var dy = (vec.y - height / 2) / game.view.zoom;
-    return vector(dx + center.x, dy + center.y);
-}

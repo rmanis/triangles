@@ -135,7 +135,9 @@ Ship.prototype.seekPoint = function(dt) {
     if (!target) {
         return;
     }
-    var v = unproject(game, target);
+    // The seekpoint is a point on the screen, which can slide around as
+    // the ship flies.
+    var v = game.view.unproject(target);
 
     var heading = this.headingTo(v);
     if (heading < 0) {
