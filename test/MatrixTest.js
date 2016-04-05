@@ -23,7 +23,10 @@ QUnit.test('Matrix tests (basic)', function(assert) {
     assert.equal(vr2.x, 0);
     assert.equal(vr2.y, 1);
 
-    var m2 = new Matrix(2, 1, 1, 2);
+    var m2 = new Matrix(
+        2, 1, 0,
+        1, 2, 0,
+        0, 0, 1);
     var v3 = new vector(1, 2).normalize();
     var vr3 = m2.mult(v3);
 

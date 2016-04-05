@@ -1,7 +1,8 @@
 
-var Vector = function(x, y) {
+var Vector = function(x, y, z) {
     this.x = x || 0;
     this.y = y || 0;
+    this.z = z || 1;
 };
 
 Vector.prototype.normalize = function() {

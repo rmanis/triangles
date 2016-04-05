@@ -31,6 +31,32 @@ View.prototype.update = function() {
 };
 
 //
+// Renders a geometry transformed by the given matrix.  A geometry is
+// an array of line strips.
+//
+View.prototype.renderGeometry = function(geometry, matrix) {
+    var m = matrix || new Matrix();
+    var row;
+    var p, point;
+    var target;
+    var ctx = this.game.context;
+    for (row in geometry) {
+        r = geometry[row];
+        ctx.beginPath();
+        for (p in r) {
+            point = geometry[row][p];
+            target = m.mult(point);
+            if (p === 0) {
+                ctx.moveTo(target.x, target.y);
+            } else {
+                ctx.lineTo(target.x, target.y);
+            }
+        }
+        ctx.stroke();
+    }
+};
+
+//
 // Project a point (`vec`) from game space to screen space
 //
 View.prototype.project = function(vec) {
