@@ -21,6 +21,9 @@ var Game = function() {
     // The input handler
     this.inputHandler = null;
 
+    // The renderer
+    this.renderer = null;
+
     // The game view
     this.view = new View(this);
 };
@@ -37,6 +40,8 @@ Game.prototype.initialize = function() {
 
     this.inputHandler = new InputHandler(this);
     this.inputHandler.initialize();
+
+    this.renderer = new Renderer(this, this.canvas, this.context);
 };
 
 Game.prototype.resizeCanvas = function() {
@@ -57,7 +62,7 @@ Game.prototype.loop = function(arg) {
     updateVel(this, dt);
     updatePos(this, dt);
     this.view.update();
-    drawAll(this, dt);
+    this.renderer.drawAll(dt);
 
     requestAnimationFrame(this.loop.bind(this));
 };
