@@ -24,7 +24,7 @@ module.exports = function(grunt) {
             },
             client : {
                 src : 'src/client/**/*.js',
-                dest : 'build/client.min.js'
+                dest: 'build/client.min.js'
             },
             server : {
                 src : 'src/server/**/*.js',
@@ -34,6 +34,16 @@ module.exports = function(grunt) {
 
         qunit : {
             all : ['test/**/*.html']
+        },
+
+        watch : {
+            scripts : {
+                files : ['**/*.js'],
+                tasks : ['jshint', 'uglify'],
+                options : {
+                    spawn : false
+                }
+            }
         }
 
     });
@@ -42,6 +52,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-qunit');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.registerTask('default', ['jshint', 'uglify', 'qunit', 'copy']);
 };
