@@ -18,8 +18,7 @@ var Ship = function(attr) {
 
     this.forces = [];
 
-    // Precursor to components
-    this.tickers = [];
+    this.components = [];
 
     this.facts = {};
 
@@ -40,9 +39,9 @@ var Ship = function(attr) {
 };
 
 Ship.prototype.update = function(dt) {
-    for (var t in this.tickers) {
-        var ticker = this.tickers[t];
-        ticker(dt);
+    for (var t in this.components) {
+        var component = this.components[t];
+        component(dt);
     }
 };
 
@@ -64,14 +63,14 @@ Ship.prototype.addForce = function(force) {
     this.forces.push(force);
 };
 
-Ship.prototype.addTicker = function(ticker) {
-    this.tickers.push(ticker);
+Ship.prototype.addComponent = function(component) {
+    this.components.push(component);
 };
 
-Ship.prototype.removeTicker = function(ticker) {
-    var i = this.tickers.indexOf(ticker);
+Ship.prototype.removeComponent = function(component) {
+    var i = this.components.indexOf(component);
     if (i >= 0) {
-        this.tickers.splice(i, 1);
+        this.components.splice(i, 1);
     }
 };
 
