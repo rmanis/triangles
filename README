@@ -1,2 +1,8 @@
 A simple in-browser space game.
 
+To build:
+
+    $ npm install
+    $ grunt
+
+The finished product will be under the `build` directory.
