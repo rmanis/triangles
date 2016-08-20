@@ -53,13 +53,13 @@ InputHandler.prototype.setupInputs = function() {
         var f = s.seekPoint.bind(s);
         s.addFact('seekpoint', p);
         s.addFact('seekfunc', f);
-        s.addTicker(f);
+        s.addComponent(f);
     }
 
     function pointEnd(e) {
         var ship = this.game.getSelf();
         var seeker = ship.removeFact('seekfunc');
-        ship.removeTicker(seeker);
+        ship.removeComponent(seeker);
         ship.removeFact('seekpoint');
     }
 
