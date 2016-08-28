@@ -1,5 +1,5 @@
 
-define([], function() {
+define(['common/types/Vector'], function(Vector) {
     //
     // Constructor for a matrix of the form:
     //
