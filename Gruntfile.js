@@ -35,6 +35,18 @@ module.exports = function(grunt) {
             }
         },
 
+        requirejs : {
+            compile : {
+                options : {
+                    baseUrl : 'src',
+                    name : 'client/Triangles',
+                    optimize : 'uglify',
+                    mainConfigFile : 'config/requireconfig.js',
+                    out : 'build/Triangles.js',
+                }
+            }
+        },
+
         qunit : {
             all : ['test/**/*.html']
         },
@@ -56,6 +68,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-requirejs');
 
     grunt.registerTask('default', ['jshint', 'uglify', 'qunit', 'copy']);
 };
