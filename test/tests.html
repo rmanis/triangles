@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <title>Basic Test Suite</title>
-  <script src="../build/common.min.js"></script>
-  <!-- Load local QUnit. -->
-  <link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css" media="screen">
+  <link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css" media="screen" />
   <script src="../node_modules/qunitjs/qunit/qunit.js"></script>
-  <!-- Load local lib and tests. -->
+  <script>
+    QUnit.config.autostart = false;
+  </script>
+  <script src="require-config.js"></script>
   <script src="testUtils.js"></script>
-  <script src="VectorTest.js"></script>
-  <script src="MatrixTest.js"></script>
+  <script data-main="testsuite.js" src="../build/require.js"></script>
 </head>
 <body>
   <div id="qunit"></div>

@@ -20,11 +20,19 @@
         z-index: -1;
       }
     </style>
+    <script>
+      function debug(text) {
+        var deb = document.getElementById('debug');
+        var p = document.createElement('pre');
+        p.textContent = text;
+        deb.appendChild(p);
+        deb.scrollTop = deb.scrollHeight;
+      }
+    </script>
   </head>
   <body>
     <div id="debug"></div>
     <canvas id="can" width="640px" height="480px"></canvas>
-    <script src="common.min.js"></script>
-    <script src="client.min.js"></script>
+    <script data-main="Triangles" src="require.js"></script>
   </body>
 </html>

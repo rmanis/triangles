@@ -1,5 +1,5 @@
 
-define([
+require([
     'client/Game',
     'common/types/Ship'
     ], function(

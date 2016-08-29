@@ -7,6 +7,10 @@ module.exports = function(grunt) {
             main : {
                 src : 'src/index.html',
                 dest : 'build/index.html'
+            },
+            requirejs : {
+                src : 'node_modules/requirejs/require.js',
+                dest : 'build/require.js'
             }
         },
 
@@ -64,11 +68,10 @@ module.exports = function(grunt) {
     });
 
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
 
-    grunt.registerTask('default', ['jshint', 'uglify', 'qunit', 'copy']);
+    grunt.registerTask('default', ['jshint', 'copy', 'requirejs', 'qunit']);
 };

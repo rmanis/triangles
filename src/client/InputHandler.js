@@ -55,7 +55,7 @@ define(['common/types/Vector'], function(Vector) {
         var touchMove = doTouchMove.bind(this);
 
         function pointStart(e) {
-            var p = vector(e.x, e.y);
+            var p = new Vector(e.x, e.y);
             var s = this.game.getSelf();
             var f = s.seekPoint.bind(s);
             s.addFact('seekpoint', p);

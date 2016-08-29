@@ -6,7 +6,7 @@
 // should be.
 //
 
-define([], function() {
+define(['common/types/Vector'], function(Vector) {
 
     var Renderer = function(game, canvas, context) {
 
@@ -49,7 +49,7 @@ define([], function() {
 
         for (var i = startx - offx; i <= endx; i += spacing) {
             for (var j = starty - offy; j <= endy; j += spacing) {
-                var pt = view.project(vector(Math.floor(i / spacing) * spacing,
+                var pt = view.project(new Vector(Math.floor(i / spacing) * spacing,
                     Math.floor(j / spacing) * spacing));
                 var path = new Path2D();
                 var siz = gridSize * zoom;
@@ -72,11 +72,11 @@ define([], function() {
         // TODO: use the ship's geometry
         // the geometry should be a field on the render component on the ship
         // the transformation matrix should be updated and stored on the render component
-        var p1 = vector(ob.x + siz * Math.cos(ob.theta),
+        var p1 = new Vector(ob.x + siz * Math.cos(ob.theta),
             ob.y + siz * Math.sin(ob.theta));
-        var p2 = vector(ob.x + siz * Math.cos(ob.theta + 5 * Math.PI / 6),
+        var p2 = new Vector(ob.x + siz * Math.cos(ob.theta + 5 * Math.PI / 6),
             ob.y + siz * Math.sin(ob.theta + 5 * Math.PI / 6));
-        var p3 = vector(ob.x + siz * Math.cos(ob.theta - 5 * Math.PI / 6),
+        var p3 = new Vector(ob.x + siz * Math.cos(ob.theta - 5 * Math.PI / 6),
             ob.y + siz * Math.sin(ob.theta - 5 * Math.PI / 6));
 
         p1 = this.game.view.project(p1);
