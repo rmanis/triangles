@@ -18,6 +18,7 @@
     "grunt-contrib-qunit": "^1.0.1",
     "grunt-contrib-requirejs": "^1.0.0",
     "grunt-contrib-uglify": "~0.5.0",
-    "grunt-contrib-watch": "^1.0.0"
+    "grunt-contrib-watch": "^1.0.0",
+    "qunitjs": "^2.0.1"
   }
 }

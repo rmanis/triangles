@@ -1,7 +1,7 @@
 
 define(['common/types/Vector'], function(Vector) {
 
-    QUnit.module("Vector");
+    QUnit.module('common/types/Vector');
 
     QUnit.test('Vector tests', function(assert) {
         var v1 = new Vector(1, 0);
@@ -20,8 +20,4 @@ define(['common/types/Vector'], function(Vector) {
         assert.ok(compareFloats(r2, 7 * Math.sqrt(2) / 2));
         console.log("End of test");
     });
-
-    return {
-        name : 'VectorTest'
-    };
 });
