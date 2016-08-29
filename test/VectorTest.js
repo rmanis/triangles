@@ -18,6 +18,5 @@ define(['common/types/Vector'], function(Vector) {
         // == 7 * sqrt(2)
         var r2 = v3.dot(v4);
         assert.ok(compareFloats(r2, 7 * Math.sqrt(2) / 2));
-        console.log("End of test");
     });
 });
