@@ -9,12 +9,17 @@ define(['common/types/Vector'], function(Vector) {
         this.size = 10;
         this.mass = 1;
 
+        // Heading in radians
         this.theta = 0;
+        // Angular velocity in radians/second
         this.omega = 0;
 
+        // Friction constant
         this.mu = 0.05;
 
+        // Thrusting force.  F = m * a
         this.thrust = 25;
+        // Turning speed
         this.agility = Math.PI * 2;
 
         this.forces = [];
