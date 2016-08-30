@@ -8,6 +8,10 @@ module.exports = function(grunt) {
                 src : 'src/index.html',
                 dest : 'build/index.html'
             },
+            stompjs : {
+                src : 'node_modules/stompjs/lib/stomp.min.js',
+                dest : 'build/stomp.min.js'
+            },
             requirejs : {
                 src : 'node_modules/requirejs/require.js',
                 dest : 'build/require.js'
