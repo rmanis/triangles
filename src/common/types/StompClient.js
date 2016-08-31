@@ -25,6 +25,12 @@ define(['common/types/Ship',
             // e.g. { '/topic/position.+0+0' : subObj }
             position: {}
         };
+
+        // How long we should keep track of received ships
+        this.removalDelay = 10000;
+
+        // The ship removal timeouts
+        this.removalTimeouts = {};
     };
 
     Client.prototype.onConnect = function() {
@@ -64,7 +70,27 @@ define(['common/types/Ship',
                 ship = Serialization.deserializeShip(message.body);
                 this.game.addShip(ship, id);
             }
+
+            if (id !== this.game.selfId) {
+                var removal = this.removalTimeouts[id];
+                if (removal) {
+                    window.clearTimeout(removal);
+                }
+                // TODO: is there a better way to do this?
+                //       Maybe keep a list of last updated times and check
+                //       against now?
+                var timeout = window.setTimeout(this.makeRemoval(id),
+                        this.removalDelay);
+                this.removalTimeouts[id] = timeout;
+            }
         }
+    };
+
+    Client.prototype.makeRemoval = function(shipId) {
+        var game = this.game;
+        return function() {
+            game.removeShip(shipId);
+        };
     };
 
     // Subscribe to a position topic, storing the subscription data.

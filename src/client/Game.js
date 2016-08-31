@@ -119,5 +119,9 @@ define([
         return this.everyone[this.selfId];
     };
 
+    Game.prototype.removeShip = function(id) {
+        delete this.everyone[id];
+    };
+
     return Game;
 });
