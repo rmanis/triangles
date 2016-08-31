@@ -1,5 +1,7 @@
 
-define(['common/types/Ship'], function(Ship) {
+define(['common/types/Ship',
+    'common/types/Serialization',
+], function(Ship, Serialization) {
     var stomp = Stomp;
 
     var Client = function(url, game) {
@@ -100,7 +102,7 @@ define(['common/types/Ship'], function(Ship) {
             shipId: this.game.selfId
         };
         this.setLastData(ship);
-        var data = this.serializeShip(ship);
+        var data = Serialization.serializeShip(ship);
         this.client.send(topic, headers, data);
     };
 
@@ -108,11 +110,6 @@ define(['common/types/Ship'], function(Ship) {
         // TODO: Base this on the ship's location's sector
         // I guess use _ for positive, - for negative
         return '/topic/position._0_0';
-    };
-
-
-    Client.prototype.serializeShip = function(ship) {
-        return JSON.stringify(ship);
     };
 
     Client.prototype.checkSubscriptions = function(ship) {
