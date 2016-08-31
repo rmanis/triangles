@@ -59,6 +59,16 @@ module.exports = function(grunt) {
             all : ['test/**/*.html']
         },
 
+        connect : {
+            server : {
+                options : {
+                    keepalive : true,
+                    port : 8000,
+                    base : 'build'
+                }
+            }
+        },
+
         watch : {
             scripts : {
                 files : ['**/*.js'],
@@ -76,6 +86,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-contrib-connect');
 
     grunt.registerTask('default', ['jshint', 'copy', 'requirejs', 'qunit']);
 };
