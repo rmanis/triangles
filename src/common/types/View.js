@@ -8,6 +8,10 @@ define(['common/types/Vector'], function(Vector) {
         this.gridSize = 3;
 
         this.game = game;
+
+        this.scroolZoomMultiplier = 0.005;
+        this.maxZoom = 3;
+        this.minZoom = 0.15;
     };
 
     View.prototype.update = function() {
@@ -80,6 +84,17 @@ define(['common/types/Vector'], function(Vector) {
         var dx = (vec.x - width / 2) / game.view.zoom;
         var dy = (vec.y - height / 2) / game.view.zoom;
         return new Vector(dx + center.x, dy + center.y);
+    };
+
+    View.prototype.changeZoom = function(amount) {
+        var newZoom = this.zoom * 1.0 + amount * this.scroolZoomMultiplier;
+        if (newZoom > this.maxZoom) {
+            this.zoom = this.maxZoom;
+        } else if (newZoom < this.minZoom) {
+            this.zoom = this.minZoom;
+        } else if (newZoom > this.minZoom && newZoom < this.maxZoom) {
+            this.zoom = newZoom;
+        }
     };
 
     return View;

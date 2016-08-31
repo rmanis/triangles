@@ -30,6 +30,7 @@ define(['common/types/Vector'], function(Vector) {
     InputHandler.prototype.setupInputs = function() {
 
         var touching = false;
+
         function doKeyDown(e) {
             var code = e.keyCode;
             this.keysPressed[code] = true;
@@ -110,6 +111,13 @@ define(['common/types/Vector'], function(Vector) {
             e.stopPropagation();
         }
 
+        function doDOMScroll(e) {
+            this.game.view.changeZoom(e.wheelDelta);
+        }
+        function doScroll(e) {
+            this.game.view.changeZoom(e.wheelDelta);
+        }
+
         document.addEventListener("keydown", doKeyDown.bind(this), true);
         document.addEventListener("keyup", doKeyUp.bind(this), true);
         this.game.canvas.addEventListener("mousedown",
@@ -123,6 +131,11 @@ define(['common/types/Vector'], function(Vector) {
             doTouchEnd.bind(this), true);
         this.game.canvas.addEventListener("touchcancel",
             doTouchEnd.bind(this), true);
+
+        this.game.canvas.addEventListener("DOMMouseScroll",
+            doDOMScroll.bind(this));
+        this.game.canvas.addEventListener("mousewheel",
+            doScroll.bind(this));
     };
 
     InputHandler.prototype.setupKeybindings = function() {
