@@ -167,5 +167,11 @@ define(['common/types/Ship',
         }
     };
 
+    Client.prototype.debug = function(text) {
+        if (this.client.connected) {
+            this.client.send('/topic/debug', {}, text);
+        }
+    };
+
     return Client;
 });
