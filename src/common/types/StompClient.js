@@ -56,7 +56,6 @@ define(['common/types/Ship',
     };
 
     Client.prototype.positionReceived = function(message) {
-        debug('Message received: ' + JSON.stringify(message, null, '  '));
         var id = message.headers.shipId;
         var ship;
         if (id !== this.game.selfId) {
@@ -81,6 +80,10 @@ define(['common/types/Ship',
             var timeout = window.setTimeout(this.makeRemoval(id),
                     this.removalDelay);
             this.removalTimeouts[id] = timeout;
+        }
+
+        if (!id) {
+            debug('Message received: ' + JSON.stringify(message, null, '  '));
         }
     };
 
