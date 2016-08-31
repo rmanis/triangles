@@ -2,12 +2,14 @@
 define([
     'client/InputHandler',
     'client/types/Renderer',
+    'common/types/StompClient',
     'common/types/View',
     'common/Guid',
     'common/Physics',
     ], function(
         InputHandler,
         Renderer,
+        StompClient,
         View,
         Guid,
         Physics) {
@@ -38,6 +40,9 @@ define([
 
         // The game view
         this.view = new View(this);
+
+        // The stomp client wrapper
+        this.stomp = null;
     };
 
     Game.prototype.initialize = function() {
@@ -54,6 +59,17 @@ define([
         this.inputHandler.initialize();
 
         this.renderer = new Renderer(this, this.canvas, this.context);
+
+        this.initStomp();
+    };
+
+    Game.prototype.initStomp = function() {
+        var url = 'ws://' + window.location.hostname + ':61623';
+        this.stomp = new StompClient(url, this);
+
+        if (this.stomp) {
+            this.stomp.connect();
+        }
     };
 
     Game.prototype.resizeCanvas = function() {
@@ -75,6 +91,7 @@ define([
         Physics.updatePos(this, dt);
         this.view.update();
         this.renderer.drawAll(dt);
+        this.stomp.updatePosition(arg, this.getSelf());
 
         requestAnimationFrame(this.loop.bind(this));
     };
@@ -90,6 +107,10 @@ define([
         var id = Guid();
         this.everyone[id] = ship;
         return id;
+    };
+
+    Game.prototype.getShip = function(id) {
+        return this.everyone[id];
     };
 
     Game.prototype.getSelf = function() {
