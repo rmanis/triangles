@@ -29,6 +29,7 @@ define(['common/types/Vector'], function(Vector) {
 
     InputHandler.prototype.setupInputs = function() {
 
+        var touching = false;
         function doKeyDown(e) {
             var code = e.keyCode;
             this.keysPressed[code] = true;
@@ -71,25 +72,40 @@ define(['common/types/Vector'], function(Vector) {
         }
 
         function doMouseDown(e) {
+            if (touching) {
+                return;
+            }
             pointStart(e);
             this.game.canvas.addEventListener("mousemove", mouseMove);
             e.stopPropagation();
         }
 
         function doMouseUp(e) {
+            if (touching) {
+                touching = false;
+                return;
+            }
             pointEnd(e);
             this.game.canvas.removeEventListener("mousemove", mouseMove);
             e.stopPropagation();
         }
 
         function doTouchStart(e) {
+            touching = true;
             pointStart({ x : e.touches[0].clientX, y : e.touches[0].clientY });
             this.game.canvas.addEventListener("touchmove", touchMove);
             e.stopPropagation();
         }
 
         function doTouchEnd(e) {
-            pointEnd({x: e.touches[0].x, y : e.touches[0].y});
+            this.game.stomp.debug('doTouchEnd : ' + JSON.stringify(e.touches));
+            var point = {};
+            if (e.touches.length) {
+                point.x = e.touches[0].x;
+                point.y = e.touches[0].y;
+            }
+            pointEnd(point);
+            this.game.canvas.removeEventListener("mousemove", mouseMove);
             this.game.canvas.removeEventListener("touchmove", touchMove);
             e.stopPropagation();
         }
