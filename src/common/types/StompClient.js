@@ -59,7 +59,7 @@ define(['common/types/Ship',
         debug('Message received: ' + JSON.stringify(message, null, '  '));
         var id = message.headers.shipId;
         var ship;
-        if (id) {
+        if (id !== this.game.selfId) {
             ship = this.game.getShip(id);
             if (ship) {
                 var parsed = JSON.parse(message.body);
@@ -71,18 +71,16 @@ define(['common/types/Ship',
                 this.game.addShip(ship, id);
             }
 
-            if (id !== this.game.selfId) {
-                var removal = this.removalTimeouts[id];
-                if (removal) {
-                    window.clearTimeout(removal);
-                }
-                // TODO: is there a better way to do this?
-                //       Maybe keep a list of last updated times and check
-                //       against now?
-                var timeout = window.setTimeout(this.makeRemoval(id),
-                        this.removalDelay);
-                this.removalTimeouts[id] = timeout;
+            var removal = this.removalTimeouts[id];
+            if (removal) {
+                window.clearTimeout(removal);
             }
+            // TODO: is there a better way to do this?
+            //       Maybe keep a list of last updated times and check
+            //       against now?
+            var timeout = window.setTimeout(this.makeRemoval(id),
+                    this.removalDelay);
+            this.removalTimeouts[id] = timeout;
         }
     };
 
