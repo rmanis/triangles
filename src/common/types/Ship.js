@@ -38,8 +38,10 @@ define(['common/types/Vector'], function(Vector) {
         });
 
         for (var k in attr) {
-            if (this.hasOwnProperty(k)) {
+            if (this.hasOwnProperty(k) && k != 'pos') {
                 this[k] = attr[k];
+            } else if (k === 'pos') {
+                this[k] = new Vector(attr.x, attr.y);
             }
         }
     };
