@@ -103,8 +103,10 @@ define([
         }
     };
 
-    Game.prototype.addShip = function(ship) {
-        var id = Guid();
+    Game.prototype.addShip = function(ship, id) {
+        if (!id) {
+            id = Guid();
+        }
         this.everyone[id] = ship;
         return id;
     };

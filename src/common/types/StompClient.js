@@ -51,6 +51,20 @@ define(['common/types/Ship',
 
     Client.prototype.positionReceived = function(message) {
         debug('Message received: ' + JSON.stringify(message, null, '  '));
+        var id = message.headers.shipId;
+        var ship;
+        if (id) {
+            ship = this.game.getShip(id);
+            if (ship) {
+                var parsed = JSON.parse(message.body);
+                for (var i in parsed) {
+                    ship[i] = parsed[i];
+                }
+            } else {
+                ship = Serialization.deserializeShip(message.body);
+                this.game.addShip(ship, id);
+            }
+        }
     };
 
     // Subscribe to a position topic, storing the subscription data.
