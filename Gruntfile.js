@@ -25,24 +25,6 @@ module.exports = function(grunt) {
             }
         },
 
-        uglify : {
-            options : {
-                sourceMap : true
-            },
-            common : {
-                src : 'src/common/**/*.js',
-                dest: 'build/common.min.js'
-            },
-            client : {
-                src : 'src/client/**/*.js',
-                dest: 'build/client.min.js'
-            },
-            server : {
-                src : 'src/server/**/*.js',
-                dest: 'build/server.min.js'
-            }
-        },
-
         requirejs : {
             compile : {
                 options : {
@@ -71,8 +53,8 @@ module.exports = function(grunt) {
 
         watch : {
             scripts : {
-                files : ['**/*.js'],
-                tasks : ['jshint', 'uglify'],
+                files : ['src/**/*.js', 'test/**/*.js'],
+                tasks : ['jshint', 'requirejs'],
                 options : {
                     spawn : false
                 }
