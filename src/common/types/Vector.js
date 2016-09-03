@@ -19,6 +19,10 @@ define([], function() {
         return this.x * this.x + this.y * this.y;
     };
 
+    Vector.prototype.add = function(b) {
+        return new Vector(this.x + b.x, this.y + b.y);
+    };
+
     Vector.prototype.subtract = function(b) {
         return new Vector(this.x - b.x, this.y - b.y);
     };

@@ -17,11 +17,13 @@ define([
         }
     };
 
-    // TODO:
-    //   Coordinate + Vector
-    //   Coordinate - Vector
-    //   Coordinate + Coordinate
-    //   Coordinate - Coordinate
+    // Adding a vector to a coordinate
+    Coordinate.prototype.add = function(v) {
+        var newCoord = new Coordinate(
+            new Vector(this.sec.x, this.sec.y),
+            this.pos.add(v));
+        return newCoord;
+    };
 
     // Adjusts the coordinate's vectors' components such that the
     // point is a sane place within a sector, i.e. vector components

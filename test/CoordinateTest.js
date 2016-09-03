@@ -86,4 +86,47 @@ define([
         assert.equal(c5.pos.x, 0);
         assert.equal(c5.pos.y, 0);
     });
+
+    QUnit.test('Coordinate tests (with vectors)', function(assert) {
+        //
+        //    +--------+
+        //    |        |      >   v1
+        //    |        |      v   v2
+        //    |  c1    |      <   v3
+        //    |  .     |      ^   v4
+        //    |        |
+        //    +--------+
+        //
+        var c1 = new Coordinate(new Vector(0,0), new Vector(10, 10));
+
+        var v1 = new Vector( max,    0);
+        var v2 = new Vector(   0, -max);
+        var v3 = new Vector(-max,    0);
+        var v4 = new Vector(   0,  max);
+
+        var c1_1 = c1.add(v1).normalize();
+        assert.equal(c1_1.sec.x, 1);
+        assert.equal(c1_1.sec.y, 0);
+        assert.equal(c1_1.pos.x,10);
+        assert.equal(c1_1.pos.y,10);
+
+        var c1_2 = c1.add(v2).normalize();
+        assert.equal(c1_2.sec.x, 0);
+        assert.equal(c1_2.sec.y,-1);
+        assert.equal(c1_2.pos.x,10);
+        assert.equal(c1_2.pos.y,10);
+
+        var c1_3 = c1.add(v3).normalize();
+        assert.equal(c1_3.sec.x,-1);
+        assert.equal(c1_3.sec.y, 0);
+        assert.equal(c1_3.pos.x,10);
+        assert.equal(c1_3.pos.y,10);
+
+        var c1_4 = c1.add(v4).normalize();
+        assert.equal(c1_4.sec.x, 0);
+        assert.equal(c1_4.sec.y, 1);
+        assert.equal(c1_4.pos.x,10);
+        assert.equal(c1_4.pos.y,10);
+
+    });
 });
