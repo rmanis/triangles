@@ -58,6 +58,14 @@ module.exports = function(grunt) {
                 options : {
                     spawn : false
                 }
+            },
+
+            qunit : {
+                files : ['src/**/*.js', 'test/**/*.js'],
+                tasks : ['qunit'],
+                options : {
+                    spawn : false
+                }
             }
         }
 
