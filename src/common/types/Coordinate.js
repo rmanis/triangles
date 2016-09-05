@@ -46,6 +46,10 @@ define([
         return result;
     };
 
+    Coordinate.prototype.distanceSquared = function(coord) {
+        return this.subtract(coord).lengthSquared();
+    };
+
     // Adjusts the coordinate's vectors' components such that the
     // point is a sane place within a sector, i.e. vector components
     // satisfy (0 <= [xy] < sectorSize)
