@@ -25,6 +25,27 @@ define([
         return newCoord;
     };
 
+    // Returns the vector from coord to this
+    //
+    // +----+----+----+----+
+    // |    |    |    |.   |
+    // | .  |    |    |    |
+    // +----+----+----+----+
+    // x            x+3
+    //   ^             ^
+    //
+    Coordinate.prototype.subtract = function(coord) {
+        var size = Constants.sectorSize;
+        var sdx = this.sec.x - coord.sec.x;
+        var dx = (sdx * size) + (this.pos.x - coord.pos.x);
+
+        var sdy = this.sec.y - coord.sec.y;
+        var dy = sdy * size + (this.pos.y - coord.pos.y);
+
+        var result = new Vector(dx, dy);
+        return result;
+    };
+
     // Adjusts the coordinate's vectors' components such that the
     // point is a sane place within a sector, i.e. vector components
     // satisfy (0 <= [xy] < sectorSize)

@@ -129,4 +129,44 @@ define([
         assert.equal(c1_4.pos.y,10);
 
     });
+
+    QUnit.test('Coordinate tests (distances)', function(assert) {
+        var a = new Coordinate(new Vector(0,0), new Vector(1,0));
+        var a2 = new Coordinate(new Vector(0,0), new Vector(2,0));
+        var b = new Coordinate(new Vector(1,0), new Vector(1,0));
+        var b2 = new Coordinate(new Vector(1,0), new Vector(0,0));
+
+        var va = a.subtract(a2);
+        assert.equal(va.x, -1, "Same sector dx");
+        assert.equal(va.y, 0, "Same sector dy");
+
+        var vab = a.subtract(b);
+        assert.equal(vab.x, -max, "One sector over dx");
+        assert.equal(vab.y, 0, "One sector over dy");
+
+        var va2b = a2.subtract(b);
+        assert.equal(va2b.x, -max + 1, "One sector over minus one dx");
+        assert.equal(va2b.y, 0, "One sector over minus one dy");
+
+        var vba2 = b.subtract(a2);
+        assert.equal(vba2.x, max - 1, "One sector over minus one dx, backwards");
+        assert.equal(vba2.y, 0, "One sector over minus one dy, backwards");
+
+        var ab2 = a.subtract(b2);
+        assert.equal(ab2.x, -max + 1);
+        assert.equal(ab2.y, 0);
+
+        var b2a = b2.subtract(a);
+        assert.equal(b2a.x, max - 1);
+        assert.equal(b2a.y, 0);
+
+        var c = new Coordinate(new Vector(0,1), new Vector(2,1));
+        var ac = a.subtract(c);
+        assert.equal(ac.x, -1);
+        assert.equal(ac.y, -(max + 1));
+
+        var ca = c.subtract(a);
+        assert.equal(ca.x, 1);
+        assert.equal(ca.y, max + 1);
+    });
 });
