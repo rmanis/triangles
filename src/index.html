@@ -28,8 +28,12 @@
       function debug(text) {
         var deb = document.getElementById('debug');
         var p = document.createElement('pre');
+        var maxDebugs = 100;
         p.textContent = text;
         deb.appendChild(p);
+        while (deb.childNodes.length > maxDebugs) {
+          deb.removeChild(deb.childNodes[0]);
+        }
         deb.scrollTop = deb.scrollHeight;
       }
     </script>
