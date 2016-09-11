@@ -1,11 +1,19 @@
 
-define(['common/types/Vector'], function(Vector) {
+define([
+    'common/types/Coordinate',
+    'common/types/Vector'
+], function(Coordinate, Vector) {
+    var originals = {
+        bigSpacing : 1000,
+        spacing : 250,
+        gridSize : 3
+    };
     var View = function(game) {
-        this.center = new Vector(0, 0);
+        this.center = new Coordinate();
         this.zoom = 1;
-        this.spacing = 250;
-        this.bigSpacing = 1000;
-        this.gridSize = 3;
+        this.spacing = originals.spacing;
+        this.bigSpacing = originals.bigSpacing;
+        this.gridSize = originals.gridSize;
 
         this.game = game;
 
@@ -23,16 +31,22 @@ define(['common/types/Vector'], function(Vector) {
         var quartY = height / 12;
 
         var self = game.getSelf();
-        if (self.x < (center.x - quartX)) {
-            center.x = self.x + quartX;
-        } else if (self.x > (center.x + quartX)) {
-            center.x = self.x - quartX;
+        var off = self.pos.subtract(center);
+        var addx = 0;
+        var addy = 0;
+        if (off.x < -quartX) {
+            addx = off.x + quartX;
+        } else if (off.x > quartX) {
+            addx = -(quartX - off.x);
         }
-        if (self.y < (center.y - quartY)) {
-            center.y = self.y + quartY;
-        } else if (self.y > (center.y + quartY)) {
-            center.y = self.y - quartY;
+        if (off.y < -quartY) {
+            addy = off.y + quartY;
+        } else if (off.y > quartY) {
+            addy = -(quartY - off.y);
         }
+        center.pos.x += addx;
+        center.pos.y += addy;
+        center.normalize();
     };
 
     //
@@ -62,16 +76,15 @@ define(['common/types/Vector'], function(Vector) {
     };
 
     //
-    // Project a point (`vec`) from game space to screen space
+    // Project a point (`coord`) from game space to screen space
     //
-    View.prototype.project = function(vec) {
+    View.prototype.project = function(coord) {
         var width = this.game.canvas.width;
         var height = this.game.canvas.height;
         var zoom = this.game.view.zoom;
         var center = this.game.view.center;
-        var x = (vec.x - center.x) * zoom;
-        var y = (vec.y - center.y) * zoom;
-        return new Vector(Math.floor(x), Math.floor(y));
+        var vec = coord.subtract(center).scale(zoom);
+        return new Vector(Math.floor(vec.x), Math.floor(vec.y));
     };
 
     //
@@ -83,7 +96,8 @@ define(['common/types/Vector'], function(Vector) {
         var center = this.game.view.center;
         var dx = (vec.x - width / 2) / game.view.zoom;
         var dy = (vec.y - height / 2) / game.view.zoom;
-        return new Vector(dx + center.x, dy + center.y);
+        return new Coordinate(new Vector(center.sec.x, center.sec.y),
+            new Vector(center.pos.x, center.pos.y)).add(new Vector(dx, dy)).normalize();
     };
 
     View.prototype.changeZoom = function(amount) {
@@ -95,6 +109,7 @@ define(['common/types/Vector'], function(Vector) {
         } else if (newZoom > this.minZoom && newZoom < this.maxZoom) {
             this.zoom = newZoom;
         }
+        // TODO: adjust grid size based on zoom.
     };
 
     return View;

@@ -2,7 +2,8 @@
 define([], function() {
 
     var Constants = {
-        sectorSize: 100
+        // NOTE: keep this and the View's grid spacing proportional
+        sectorSize: 1000
     };
 
     return Constants;

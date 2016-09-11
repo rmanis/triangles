@@ -2,7 +2,7 @@
 define(['common/types/Ship'], function(Ship) {
     var Serialization = {
         serializeShip : function(ship) {
-            var attributes = ['x','y','vx','vy','theta','omega'];
+            var attributes = ['pos','vx','vy','theta','omega'];
             var data = {};
             var i;
             for (i in attributes) {

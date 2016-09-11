@@ -1,8 +1,11 @@
 
-define(['common/types/Vector'], function(Vector) {
+define([
+    'common/types/Vector',
+    'common/types/Coordinate'
+], function(Vector, Coordinate) {
     var Ship = function(attr) {
 
-        this.pos = new Vector();
+        this.pos = new Coordinate();
         this.vx = 0;
         this.vy = 0;
 
@@ -28,20 +31,13 @@ define(['common/types/Vector'], function(Vector) {
 
         this.facts = {};
 
-        Object.defineProperty(this, 'x', {
-            get: function() { return this.pos.x; },
-            set: function(x) { this.pos.x = x; },
-        });
-        Object.defineProperty(this, 'y', {
-            get: function() { return this.pos.y; },
-            set: function(y) { this.pos.y = y; },
-        });
-
         for (var k in attr) {
             if (this.hasOwnProperty(k) && k != 'pos') {
                 this[k] = attr[k];
             } else if (k === 'pos') {
-                this[k] = new Vector(attr.x, attr.y);
+                this[k] = new Coordinate(
+                    new Vector(attr.pos.sec.x, attr.pos.sec.y),
+                    new Vector(attr.pos.pos.x, attr.pos.pos.y));
             }
         }
     };

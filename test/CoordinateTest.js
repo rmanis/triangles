@@ -80,11 +80,11 @@ define([
         assert.equal(c8.pos.x, max - 5);
         assert.equal(c8.pos.y, 6);
 
-        var c5 = new Coordinate(new Vector(2,3), new Vector(max,max)).normalize();
-        assert.equal(c5.sec.x, 3);
-        assert.equal(c5.sec.y, 4);
-        assert.equal(c5.pos.x, 0);
-        assert.equal(c5.pos.y, 0);
+        var c9 = new Coordinate(new Vector(2,3), new Vector(max,max)).normalize();
+        assert.equal(c9.sec.x, 3);
+        assert.equal(c9.sec.y, 4);
+        assert.equal(c9.pos.x, 0);
+        assert.equal(c9.pos.y, 0);
     });
 
     QUnit.test('Coordinate tests (with vectors)', function(assert) {

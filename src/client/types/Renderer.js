@@ -6,7 +6,10 @@
 // should be.
 //
 
-define(['common/types/Vector'], function(Vector) {
+define([
+    'common/types/Vector',
+    'common/types/Coordinate'
+], function(Vector, Coordinate) {
 
     var Renderer = function(game, canvas, context) {
 
@@ -31,6 +34,8 @@ define(['common/types/Vector'], function(Vector) {
     //
     Renderer.prototype.drawSegments = function() {
         var view = this.game.view;
+        var center = view.center;
+
         // Little crosses
         var spacing = view.spacing;
         // Big crosses
@@ -38,8 +43,9 @@ define(['common/types/Vector'], function(Vector) {
         // How long the little crosses are, radius
         var gridSize = view.gridSize;
         var zoom = view.zoom;
-        var startx = Math.floor(view.center.x / spacing) * spacing;
-        var starty = Math.floor(view.center.y / spacing) * spacing;
+
+        var startx = Math.floor(center.pos.x / spacing) * spacing;
+        var starty = Math.floor(center.pos.y / spacing) * spacing;
 
         var offx = Math.floor(game.canvas.width / (zoom * 2) / spacing) * spacing;
         var offy = Math.floor(game.canvas.height / (zoom * 2) / spacing) * spacing;
@@ -49,20 +55,29 @@ define(['common/types/Vector'], function(Vector) {
 
         for (var i = startx - offx; i <= endx; i += spacing) {
             for (var j = starty - offy; j <= endy; j += spacing) {
-                var pt = view.project(new Vector(Math.floor(i / spacing) * spacing,
-                    Math.floor(j / spacing) * spacing));
+                var pt = view.project(new Coordinate(view.center.sec,
+                    new Vector(Math.floor(i / spacing) * spacing,
+                        Math.floor(j / spacing) * spacing)));
                 var path = new Path2D();
                 var siz = gridSize * zoom;
                 if (i % bigSpacing === 0 && j % bigSpacing === 0) {
                     siz *= 2;
                 }
-                path.moveTo(pt.x - siz, pt.y);
-                path.lineTo(pt.x + siz, pt.y);
-                path.moveTo(pt.x, pt.y - siz);
-                path.lineTo(pt.x, pt.y + siz);
-                game.context.stroke(path);
+                this.drawCross(pt, siz);
             }
         }
+    };
+
+    //
+    // Draws a cross at screen location `vec`
+    //
+    Renderer.prototype.drawCross = function(vec, size) {
+        var path = new Path2D();
+        path.moveTo(vec.x - size, vec.y);
+        path.lineTo(vec.x + size, vec.y);
+        path.moveTo(vec.x, vec.y - size);
+        path.lineTo(vec.x, vec.y + size);
+        game.context.stroke(path);
     };
 
     Renderer.prototype.draw = function(ob) {
@@ -72,12 +87,13 @@ define(['common/types/Vector'], function(Vector) {
         // TODO: use the ship's geometry
         // the geometry should be a field on the render component on the ship
         // the transformation matrix should be updated and stored on the render component
-        var p1 = new Vector(ob.x + siz * Math.cos(ob.theta),
-            ob.y + siz * Math.sin(ob.theta));
-        var p2 = new Vector(ob.x + siz * Math.cos(ob.theta + 5 * Math.PI / 6),
-            ob.y + siz * Math.sin(ob.theta + 5 * Math.PI / 6));
-        var p3 = new Vector(ob.x + siz * Math.cos(ob.theta - 5 * Math.PI / 6),
-            ob.y + siz * Math.sin(ob.theta - 5 * Math.PI / 6));
+        var coord = ob.pos;
+        var p1 = coord.add(new Vector(siz * Math.cos(ob.theta),
+                siz * Math.sin(ob.theta)));
+        var p2 = coord.add(new Vector(siz * Math.cos(ob.theta + 5 * Math.PI / 6),
+                siz * Math.sin(ob.theta + 5 * Math.PI / 6)));
+        var p3 = coord.add(new Vector(siz * Math.cos(ob.theta - 5 * Math.PI / 6),
+                siz * Math.sin(ob.theta - 5 * Math.PI / 6)));
 
         p1 = this.game.view.project(p1);
         p2 = this.game.view.project(p2);

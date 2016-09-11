@@ -22,8 +22,9 @@ define(['common/types/Vector'], function(Vector) {
         updatePos: function(game, dt) {
             for (var key in game.everyone) {
                 var o = game.everyone[key];
-                o.x += o.vx * dt;
-                o.y += o.vy * dt;
+                o.pos.pos.x += o.vx * dt;
+                o.pos.pos.y += o.vy * dt;
+                o.pos.normalize();
             }
         },
 
