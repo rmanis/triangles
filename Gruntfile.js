@@ -52,9 +52,9 @@ module.exports = function(grunt) {
         },
 
         watch : {
-            scripts : {
+            build : {
                 files : ['src/**/*.js', 'test/**/*.js'],
-                tasks : ['jshint', 'requirejs'],
+                tasks : ['jshint', 'requirejs', 'exec:reload'],
                 options : {
                     spawn : false
                 }
@@ -67,6 +67,10 @@ module.exports = function(grunt) {
                     spawn : false
                 }
             }
+        },
+
+        exec : {
+            reload: './reloader'
         }
 
     });
@@ -77,6 +81,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-exec');
 
     grunt.registerTask('default', ['jshint', 'copy', 'requirejs', 'qunit']);
 };
