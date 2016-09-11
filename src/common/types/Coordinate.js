@@ -65,5 +65,9 @@ define([
         return this;
     };
 
+    Coordinate.prototype.toString = function() {
+        return '(' + this.sec + ',' + this.pos + ')';
+    };
+
     return Coordinate;
 });
