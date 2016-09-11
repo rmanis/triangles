@@ -35,7 +35,7 @@ define(['common/types/Ship',
 
     Client.prototype.onConnect = function() {
         debug('onConnect called');
-        var sub = this.client.subscribe('/queue/reload', function() {
+        var sub = this.client.subscribe('/topic/reload', function() {
             window.location.reload(false);
         }, {});
     };
