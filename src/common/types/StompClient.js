@@ -1,7 +1,9 @@
 
 define(['common/types/Ship',
     'common/types/Serialization',
-], function(Ship, Serialization) {
+    'common/types/Coordinate',
+    'common/types/Vector',
+], function(Ship, Serialization, Coordinate, Vector) {
     var stomp = Stomp;
 
     var Client = function(url, game) {
@@ -65,9 +67,13 @@ define(['common/types/Ship',
             ship = this.game.getShip(id);
             if (ship) {
                 var parsed = JSON.parse(message.body);
+
                 for (var i in parsed) {
                     ship[i] = parsed[i];
                 }
+                ship.pos = new Coordinate(
+                    new Vector(ship.pos.sec.x, ship.pos.sec.y),
+                    new Vector(ship.pos.pos.x, ship.pos.pos.y));
             } else {
                 ship = Serialization.deserializeShip(message.body);
                 this.game.addShip(ship, id);
