@@ -15,7 +15,7 @@ define(['common/types/Ship',
         this.lastBroadcastTime = 0;
 
         // Maximum time between broadcasting updates in milliseconds
-        this.timeThreshold = 3000;
+        this.timeThreshold = 700;
 
         // Distance (squared) required to make a new broadcast
         this.distanceSquaredThreshold = 2500;
@@ -29,10 +29,13 @@ define(['common/types/Ship',
         };
 
         // How long we should keep track of received ships
-        this.removalDelay = 10000;
+        this.removalDelay = this.timeThreshold * 3;
 
         // The ship removal timeouts
         this.removalTimeouts = {};
+
+        // Should we log subscribes and unsubscribes?
+        this.debugSubs = false;
     };
 
     Client.prototype.onConnect = function() {
@@ -110,7 +113,9 @@ define(['common/types/Ship',
             if (sub) {
                 sub.unsubscribe();
             }
-            debug('subscribing to ' + topic);
+            if (this.debugSubs) {
+                debug('subscribing to ' + topic);
+            }
             sub = this.client.subscribe(topic, callback, {});
             this.subscriptions.position[topic] = sub;
         }
@@ -119,7 +124,9 @@ define(['common/types/Ship',
     Client.prototype.unsubscribePosition = function(topic) {
         var subdata = this.subscriptions.position[topic];
         if (subdata) {
-            debug('unsibscribing from ' + topic);
+            if (this.debugSubs) {
+                debug('unsubscribing from ' + topic);
+            }
             subdata.unsubscribe();
             delete this.subscriptions.position[topic];
         }
