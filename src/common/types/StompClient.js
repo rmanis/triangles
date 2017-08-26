@@ -105,19 +105,23 @@ define(['common/types/Ship',
 
     // Subscribe to a position topic, storing the subscription data.
     Client.prototype.subscribePosition = function(topic, callback) {
-        var sub = this.subscriptions.position[topic];
-        if (sub) {
-            sub.unsubscribe();
+        if (this.client.connected) {
+            var sub = this.subscriptions.position[topic];
+            if (sub) {
+                sub.unsubscribe();
+            }
+            debug('subscribing to ' + topic);
+            sub = this.client.subscribe(topic, callback, {});
+            this.subscriptions.position[topic] = sub;
         }
-        debug('subscribing to ' + topic);
-        sub = this.client.subscribe(topic, callback, {});
-        this.subscriptions.position[topic] = sub;
     };
 
     Client.prototype.unsubscribePosition = function(topic) {
         var subdata = this.subscriptions.position[topic];
         if (subdata) {
+            debug('unsibscribing from ' + topic);
             subdata.unsubscribe();
+            delete this.subscriptions.position[topic];
         }
     };
 
@@ -157,23 +161,48 @@ define(['common/types/Ship',
     };
 
     Client.prototype.getPositionTopic = function(ship) {
-        // TODO: Base this on the ship's location's sector
-        // I guess use _ for positive, - for negative
-        return '/topic/position._0_0';
+        return this.topicForSector(ship.pos.sec.x, ship.pos.sec.y);
+    };
+
+    Client.prototype.topicForSector = function(x, y) {
+        var xComp = (x < 0 ? "" : "_") + x;
+        var yComp = (y < 0 ? "" : "_") + y;
+        return "/topic/position." + xComp + yComp;
+    };
+
+    Client.prototype.subscribeSectorsExclusive = function(sectorTopics) {
+        var topic;
+        var i;
+        for (topic in this.subscriptions.position) {
+            if (sectorTopics.indexOf(topic) < 0) {
+                this.unsubscribePosition(topic);
+            }
+        }
+        for (i in sectorTopics) {
+            topic = sectorTopics[i];
+            if (!this.subscriptions.position[topic]) {
+                var callback = this.positionReceived.bind(this);
+                this.subscribePosition(topic, callback);
+            }
+        }
     };
 
     Client.prototype.checkSubscriptions = function(ship) {
         // Compare the ship's position with the list of topics we are
         // subscribed to.
-        // TODO: Get subscribe to surrounding sectors
-        // TODO: Make this useful
-        if (!this.subscribed && this.client.connected) {
-            var topic = this.getPositionTopic(ship);
-            var callback = this.positionReceived.bind(this);
-            this.subscribePosition(topic, callback);
-            // TODO: not this.
-            this.subscribed = true;
+        var x = ship.pos.sec.x;
+        var y = ship.pos.sec.y;
+        var i, j;
+        var subs = [];
+        var key;
+
+        for (i = x - 1; i <= x + 1; i++) {
+            for (j = y - 1; j <= y + 1; j++) {
+                subs.push(this.topicForSector(i, j));
+            }
         }
+
+        this.subscribeSectorsExclusive(subs);
     };
 
     Client.prototype.debug = function(text) {
