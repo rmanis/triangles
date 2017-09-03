@@ -9,7 +9,7 @@ define(['common/types/Ship',
     var Client = function(url, game) {
         this.client = url ?  Stomp.client(url) : null;
         this.game = game;
-        this.lastData = null;
+        this.lastPositionBroadcast = null;
 
         // The last time we sent out a broadcast
         this.lastBroadcastTime = 0;
@@ -38,11 +38,14 @@ define(['common/types/Ship',
         this.debugSubs = false;
     };
 
-    Client.prototype.onConnect = function() {
+    Client.prototype.onConnect = function(callback) {
         debug('onConnect called');
         var sub = this.client.subscribe('/topic/reload', function() {
             window.location.reload(false);
         }, {});
+        if (callback) {
+            callback();
+        }
     };
 
     Client.prototype.onError = function(error) {
@@ -51,15 +54,15 @@ define(['common/types/Ship',
         // Fail after N tries??
     };
 
-    Client.prototype.connect = function() {
+    Client.prototype.connect = function(login, callback) {
         if (!this.client) {
             return;
         }
         this.client.connect({
-                login: this.game.selfId,
+                login: login,
                 passcode: 'triangles'
             },
-            this.onConnect.bind(this),
+            this.onConnect.bind(this, callback),
             this.onError.bind(this));
     };
 
@@ -106,6 +109,24 @@ define(['common/types/Ship',
         };
     };
 
+    Client.prototype.subscribe = function(topic, name, callback) {
+        if (this.subscriptions[name]) {
+            this.subscriptions[name].push(this.client.subscribe(topic, callback, {}));
+        } else {
+            this.subscriptions[name] = [
+                this.client.subscribe(topic, callback, {})
+            ];
+        }
+    };
+
+    Client.prototype.send = function(destination, headers, body) {
+        if (this.client.connected) {
+            this.client.send(destination, headers, body);
+        }
+    };
+
+    // TODO: consider pulling out position subscription
+
     // Subscribe to a position topic, storing the subscription data.
     Client.prototype.subscribePosition = function(topic, callback) {
         if (this.client.connected) {
@@ -136,9 +157,9 @@ define(['common/types/Ship',
         // Check subscriptions, update when sector changes
         this.checkSubscriptions(player_ship);
         // Decide whether to broadcast update
-        var shouldBroadcast = !this.lastData;
-        if (this.lastData) {
-            var dp = player_ship.pos.subtract(this.lastData.pos);
+        var shouldBroadcast = !this.lastPositionBroadcast;
+        if (this.lastPositionBroadcast) {
+            var dp = player_ship.pos.subtract(this.lastPositionBroadcast.pos);
             shouldBroadcast = shouldBroadcast ||
                 (dp.lengthSquared() > this.distanceSquaredThreshold) ||
                 (now - this.lastBroadcastTime > this.timeThreshold);
@@ -149,8 +170,8 @@ define(['common/types/Ship',
         }
     };
 
-    Client.prototype.setLastData = function(ship) {
-        this.lastData = new Ship(ship);
+    Client.prototype.setLastPositionBroadcast = function(ship) {
+        this.lastPositionBroadcast = new Ship(ship);
     };
 
     Client.prototype.broadcastPosition = function(now, ship) {
@@ -162,7 +183,7 @@ define(['common/types/Ship',
         var headers = {
             shipId: this.game.selfId
         };
-        this.setLastData(ship);
+        this.setLastPositionBroadcast(ship);
         var data = Serialization.serializeShip(ship);
         this.client.send(topic, headers, data);
     };
@@ -171,6 +192,7 @@ define(['common/types/Ship',
         return this.topicForSector(ship.pos.sec.x, ship.pos.sec.y);
     };
 
+    // TODO: maybe rename to positionTopicForSector ?
     Client.prototype.topicForSector = function(x, y) {
         var xComp = (x < 0 ? "" : "_") + x;
         var yComp = (y < 0 ? "" : "_") + y;
@@ -212,11 +234,17 @@ define(['common/types/Ship',
         this.subscribeSectorsExclusive(subs);
     };
 
+    Client.prototype.isConnected = function() {
+        return this.client.connected;
+    };
+
     Client.prototype.debug = function(text) {
         if (this.client.connected) {
             this.client.send('/topic/debug', {}, text);
         }
     };
+
+    Client.positionTopicPrefix = '/topic/position.';
 
     return Client;
 });

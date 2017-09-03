@@ -68,7 +68,7 @@ define([
         this.stomp = new StompClient(url, this);
 
         if (this.stomp) {
-            this.stomp.connect();
+            this.stomp.connect(this.selfId, null);
         }
     };
 

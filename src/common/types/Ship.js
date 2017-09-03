@@ -5,6 +5,7 @@ define([
 ], function(Vector, Coordinate) {
     var Ship = function(attr) {
 
+        // TODO: rename Ship.pos to Ship.coord
         this.pos = new Coordinate();
         this.vx = 0;
         this.vy = 0;

@@ -69,5 +69,17 @@ define([
         return '(' + this.sec + ',' + this.pos + ')';
     };
 
+    Coordinate.prototype.toTopicSubString = function() {
+        var xprefix = this.sec.x < 0 ? "" : "_";
+        var yprefix = this.sec.y < 0 ? "" : "_";
+        return xprefix + this.sec.x + yprefix + this.sec.y;
+    };
+
+    Coordinate.toTopicSubStringXY = function(x, y) {
+        var xprefix = x < 0 ? "" : "_";
+        var yprefix = y < 0 ? "" : "_";
+        return xprefix + x + yprefix + y;
+    };
+
     return Coordinate;
 });

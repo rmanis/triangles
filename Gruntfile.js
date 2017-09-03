@@ -8,6 +8,10 @@ module.exports = function(grunt) {
                 src : 'src/index.html',
                 dest : 'build/index.html'
             },
+            server : {
+                src : 'src/server.html',
+                dest : 'build/server.html'
+            },
             stompjs : {
                 src : 'node_modules/stompjs/lib/stomp.min.js',
                 dest : 'build/stomp.min.js'
@@ -33,6 +37,15 @@ module.exports = function(grunt) {
                     optimize : 'uglify',
                     mainConfigFile : 'config/requireconfig.js',
                     out : 'build/Triangles.js',
+                }
+            },
+            compileServer : {
+                options : {
+                    baseUrl : 'src',
+                    name : 'server/server',
+                    optimize : 'uglify',
+                    mainConfigFile : 'config/requireconfig.js',
+                    out : 'build/server.js',
                 }
             }
         },
