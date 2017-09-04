@@ -67,8 +67,19 @@ define(['common/types/Ship',
     };
 
     Client.prototype.positionReceived = function(message) {
-        var id = message.headers.shipId;
+        var shipId = message.headers.shipId;
+        var planetId = message.headers.planetId;
+
+        if (shipId) {
+            this.shipReceived(message);
+        } else if (planetId) {
+            this.planetReceived(message);
+        }
+    };
+
+    Client.prototype.shipReceived = function(message) {
         var ship;
+        var id = message.headers.shipId;
         if (id !== this.game.selfId) {
             ship = this.game.getShip(id);
             if (ship) {
@@ -99,6 +110,15 @@ define(['common/types/Ship',
 
         if (!id) {
             debug('Message received: ' + JSON.stringify(message, null, '  '));
+        }
+    };
+
+    Client.prototype.planetReceived = function(message) {
+        var planet;
+
+        planet = Serialization.deserializePlanet(message.body);
+        if (planet) {
+            this.game.planets.addPlanet(planet);
         }
     };
 
@@ -188,15 +208,26 @@ define(['common/types/Ship',
         this.client.send(topic, headers, data);
     };
 
-    Client.prototype.getPositionTopic = function(ship) {
-        return this.topicForSector(ship.pos.sec.x, ship.pos.sec.y);
-    };
-
-    // TODO: maybe rename to positionTopicForSector ?
-    Client.prototype.topicForSector = function(x, y) {
+    Client.prototype.topicForXY = function(prefix, x, y) {
         var xComp = (x < 0 ? "" : "_") + x;
         var yComp = (y < 0 ? "" : "_") + y;
-        return "/topic/position." + xComp + yComp;
+        return prefix + xComp + yComp;
+    };
+
+    Client.prototype.topicForCoordinate = function(prefix, coord) {
+        return prefix + coord.toTopicSubString();
+    };
+
+    Client.prototype.getPositionTopic = function(ship) {
+        return this.topicForCoordinate(Client.positionTopicPrefix, ship.pos);
+    };
+
+    Client.prototype.positionTopicForSector = function(x, y) {
+        return this.topicForXY(Client.positionTopicPrefix, x, y);
+    };
+
+    Client.prototype.planetTopicForSector = function(x, y) {
+        return this.topicForXY(Client.planetTopicPrefix, x, y);
     };
 
     Client.prototype.subscribeSectorsExclusive = function(sectorTopics) {
@@ -227,7 +258,7 @@ define(['common/types/Ship',
 
         for (i = x - 1; i <= x + 1; i++) {
             for (j = y - 1; j <= y + 1; j++) {
-                subs.push(this.topicForSector(i, j));
+                subs.push(this.positionTopicForSector(i, j));
             }
         }
 
@@ -245,6 +276,7 @@ define(['common/types/Ship',
     };
 
     Client.positionTopicPrefix = '/topic/position.';
+    Client.planetTopicPrefix = '/topic/position.';
 
     return Client;
 });

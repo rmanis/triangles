@@ -1,11 +1,12 @@
 
 define([
+    'common/Constants',
     'common/types/Coordinate',
     'common/types/Vector'
-], function(Coordinate, Vector) {
+], function(Constants, Coordinate, Vector) {
     var originals = {
-        bigSpacing : 1000,
-        spacing : 250,
+        bigSpacing : Constants.sectorSize,
+        spacing : Constants.sectorSize / 4,
         gridSize : 3
     };
     var View = function(game) {

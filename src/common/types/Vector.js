@@ -55,6 +55,12 @@ define([], function() {
         return Math.acos(num);
     };
 
+    Vector.prototype.toTopicSubString = function() {
+        var xprefix = this.x < 0 ? "" : "_";
+        var yprefix = this.y < 0 ? "" : "_";
+        return xprefix + this.x + yprefix + this.y;
+    };
+
     Vector.prototype.toString = function() {
         return "(" + this.x + ", " + this.y + ")";
     };

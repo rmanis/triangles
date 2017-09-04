@@ -1,7 +1,7 @@
 
 require([
     'common/Constants',
-    'server/Planets',
+    'common/types/Planets',
     'server/PlanetStomp',
 ], function(Constants, Planets, PlanetStomp) {
 
@@ -21,11 +21,6 @@ require([
         var delay = planet.lastBroadcast + Constants.planetBroadcastDelay - now;
 
         setTimeout(broadcastPlanetScheduled, delay, planet);
-    };
-
-    var planetAdded = function(planet) {
-
-        broadcastPlanetScheduled(planet);
     };
 
     planets.initialize();

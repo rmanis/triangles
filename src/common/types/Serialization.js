@@ -1,5 +1,8 @@
 
-define(['common/types/Ship'], function(Ship) {
+define([
+    'common/types/Ship',
+    'common/types/Planet',
+], function(Ship, Planet) {
     var Serialization = {
 
         serializeAttributes : function(object, attributes) {
@@ -23,8 +26,13 @@ define(['common/types/Ship'], function(Ship) {
         },
 
         serializePlanet : function(planet) {
-            var attributes = ['id', 'coord'];
+            var attributes = ['id', 'coord', 'radius', 'mass'];
             return Serialization.serializeAttributes(planet, attributes);
+        },
+
+        deserializePlanet : function(text) {
+            var data = JSON.parse(text);
+            return new Planet(data.id, data.coord, data.radius, data.mass);
         }
     };
 

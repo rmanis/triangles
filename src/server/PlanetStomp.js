@@ -11,8 +11,7 @@ define([
         this.planets = planets;
         this.stomp = null;
         this.ships = {};
-
-        this.onConnectCallbacks = [];
+        this.positionTopicPrefix = StompClient.positionTopicPrefix;
     };
 
     var ShipRecord = function(id, ship) {
@@ -44,11 +43,8 @@ define([
 
     PlanetStomp.prototype.onConnect = function() {
         for (var p in this.planets.positionToPlanetArray) {
-            var topic = StompClient.positionTopicPrefix + p;
+            var topic = this.positionTopicPrefix + p;
             this.subscribe(topic, this.shipReceived.bind(this));
-        }
-        for (var i in this.onConnectCallbacks) {
-            this.onConnectCallbacks[i].onConnect();
         }
     };
 
@@ -58,7 +54,7 @@ define([
 
     PlanetStomp.prototype.broadcastPlanet = function(planet) {
         if (this.stomp.isConnected()) {
-            var destination = "/topic/planet." + planet.coord.toTopicSubString();
+            var destination = StompClient.planetTopicPrefix + planet.coord.toTopicSubString();
             var headers = {
                 planetId : planet.id,
             };
@@ -70,6 +66,10 @@ define([
 
     PlanetStomp.prototype.shipReceived = function(message) {
         var id = message.headers.shipId;
+        if (!id) {
+            return;
+        }
+
         var shipRecord = this.ships[id];
         var ship;
 
@@ -99,7 +99,9 @@ define([
     PlanetStomp.prototype.informShip = function(ship) {
         var sector = ship.pos;
         var planetsInSector = this.planets.planetsInSector(sector.x, sector.y);
-        planetsInSector.map(this.broadcastPlanet.bind(this));
+        for (var id in planetsInSector) {
+            this.broadcastPlanet(planetsInSector[id]);
+        }
     };
 
     return PlanetStomp;

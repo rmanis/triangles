@@ -8,14 +8,16 @@
 
 define([
     'common/types/Vector',
-    'common/types/Coordinate'
-], function(Vector, Coordinate) {
+    'common/types/Coordinate',
+    'client/types/PlanetRenderer',
+], function(Vector, Coordinate, PlanetRenderer) {
 
     var Renderer = function(game, canvas, context) {
 
         this.game = game;
         this.canvas = canvas;
         this.context = context;
+        this.planetRenderer = new PlanetRenderer(game, context);
     };
 
     Renderer.prototype.drawAll = function(dt) {
@@ -23,6 +25,7 @@ define([
         var height = this.canvas.height;
         this.context.clearRect(-width / 2, -height / 2,
             width, height);
+        this.planetRenderer.drawPlanets(this.game.planets);
         for (var key in this.game.everyone) {
             this.draw(game.everyone[key]);
         }

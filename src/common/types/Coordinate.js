@@ -65,6 +65,11 @@ define([
         return this;
     };
 
+    Coordinate.prototype.equals = function(c) {
+        return c.sec.x == this.sec.x && c.sec.y == this.sec.y &&
+            c.pos.x == this.pos.x && c.pos.y == this.pos.y;
+    };
+
     Coordinate.prototype.toString = function() {
         return '(' + this.sec + ',' + this.pos + ')';
     };

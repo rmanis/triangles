@@ -2,6 +2,7 @@
 define([
     'client/InputHandler',
     'client/types/Renderer',
+    'common/types/Planets',
     'common/types/StompClient',
     'common/types/View',
     'common/Guid',
@@ -9,6 +10,7 @@ define([
     ], function(
         InputHandler,
         Renderer,
+        Planets,
         StompClient,
         View,
         Guid,
@@ -19,6 +21,9 @@ define([
         // Key is the user id
         // Value is their ship
         this.everyone = {};
+
+        // The planets.
+        this.planets = new Planets();
 
         // This player's user id
         this.selfId = null;
