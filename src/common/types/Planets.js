@@ -40,7 +40,6 @@ define([
     Planets.prototype.planetsInSector = function(x, y) {
         return this.positionToPlanetArray[Coordinate.toTopicSubStringXY(x, y)];
     };
-    };
 
     Planets.prototype.addPlanet = function(planet) {
 
