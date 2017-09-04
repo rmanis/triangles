@@ -55,6 +55,10 @@ define([], function() {
         return Math.acos(num);
     };
 
+    Vector.prototype.equals = function(v) {
+        return this.x == v.x && this.y == v.y;
+    };
+
     Vector.prototype.toTopicSubString = function() {
         var xprefix = this.x < 0 ? "" : "_";
         var yprefix = this.y < 0 ? "" : "_";

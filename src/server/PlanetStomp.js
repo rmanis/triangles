@@ -77,6 +77,7 @@ define([
             ship = shipRecord.ship;
 
             var parsed = JSON.parse(message.body);
+            var oldSec = ship.pos.sec;
 
             for (var i in parsed) {
                 ship[i] = parsed[i];
@@ -85,6 +86,10 @@ define([
                 new Vector(ship.pos.sec.x, ship.pos.sec.y),
                 new Vector(ship.pos.pos.x, ship.pos.pos.y));
             shipRecord.lastUpdated = new Date();
+
+            if (!oldSec.equals(ship.pos.sec)) {
+                this.informShip(ship);
+            }
         } else {
             ship = Serialization.deserializeShip(message.body);
             this.addShip(id, ship);
@@ -97,7 +102,7 @@ define([
     };
 
     PlanetStomp.prototype.informShip = function(ship) {
-        var sector = ship.pos;
+        var sector = ship.pos.sec;
         var planetsInSector = this.planets.planetsInSector(sector.x, sector.y);
         for (var id in planetsInSector) {
             this.broadcastPlanet(planetsInSector[id]);
