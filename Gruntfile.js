@@ -16,6 +16,10 @@ module.exports = function(grunt) {
                 src : 'node_modules/stompjs/lib/stomp.min.js',
                 dest : 'build/stomp.min.js'
             },
+            planetEditor : {
+                src : 'src/planet-editor.html',
+                dest : 'build/planet-editor.html'
+            },
             requirejs : {
                 src : 'node_modules/requirejs/require.js',
                 dest : 'build/require.js'
@@ -46,6 +50,14 @@ module.exports = function(grunt) {
                     optimize : 'uglify',
                     mainConfigFile : 'config/requireconfig.js',
                     out : 'build/server.js',
+                }
+            }, compilePlanetEditor : {
+                options : {
+                    baseUrl : 'src',
+                    name : 'editor/PlanetEdit',
+                    optimize : 'none',
+                    mainConfigFile : 'config/requireconfig.js',
+                    out : 'build/PlanetEdit.js',
                 }
             }
         },

@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <title>Editor</title>
+    <style type="text/css">
+      * { margin:0; padding: 0; }
+      html, body {
+        width: 100%;
+      }
+      canvas {
+        position: fixed;
+        display: block;
+        top: 10px;
+        background-color: rgb(222, 222, 222);
+        border: 1px solid black;
+      }
+
+      #planetData {
+        position: fixed;
+        bottom: 10px;
+        top: 500px;
+        left: 10px;
+        width: 640px;
+      }
+
+      #spaceGrid {
+        left: 10px;
+        width: 640px;
+        height: 480px;
+      }
+
+      #sectorView {
+        right: 10px;
+        width: 400px;
+        height: 400px;
+      }
+
+      #propertyInputs {
+        position: fixed;
+        right: 10px;
+        top: 420;
+        bottom: 10px;
+        width: 400px;
+        border: 1px solid black;
+        overflow: scroll;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="spaceGrid" width="640px" height="480px"></canvas>
+    <canvas id="sectorView" width="400px" height="400px"></canvas>
+    <div id="propertyInputs"></div>
+    <textarea id="planetData"></textarea>
+
+    <script data-main="PlanetEdit" src="require.js"></script>
+  </body>
+</html>

@@ -82,23 +82,52 @@ define([
     View.prototype.project = function(coord) {
         var width = this.game.canvas.width;
         var height = this.game.canvas.height;
-        var zoom = this.game.view.zoom;
-        var center = this.game.view.center;
+        var zoom = this.zoom;
+        var center = this.center;
         var vec = coord.subtract(center).scale(zoom);
         return new Vector(Math.floor(vec.x), Math.floor(vec.y));
     };
 
     //
     // Project a point from screen space to game space
+    // TODO: remove reference to this.game
     //
     View.prototype.unproject = function(vec) {
         var width = this.game.canvas.width;
         var height = this.game.canvas.height;
-        var center = this.game.view.center;
-        var dx = (vec.x - width / 2) / game.view.zoom;
-        var dy = (vec.y - height / 2) / game.view.zoom;
+        var center = this.center;
+        var dx = (vec.x - width / 2) / this.zoom;
+        var dy = (vec.y - height / 2) / this.zoom;
         return new Coordinate(new Vector(center.sec.x, center.sec.y),
             new Vector(center.pos.x, center.pos.y)).add(new Vector(dx, dy)).normalize();
+    };
+
+    //
+    // Returns the coordinate of the top left corner of the view
+    // for the given canvas.
+    //
+    View.prototype.topLeft = function(canvas) {
+        var width = canvas.width;
+        var height = canvas.height;
+        var center = this.center;
+        var dx = width / (this.zoom * 2);
+        var dy = height / (this.zoom * 2);
+        return new Coordinate(new Vector(center.sec.x, center.sec.y),
+            new Vector(center.pos.x - dx, center.pos.y - dy)).normalize();
+    };
+
+    //
+    // Returns the coordinate of the bottom right corner of the view
+    // for the given canvas.
+    //
+    View.prototype.bottomRight = function(canvas) {
+        var width = canvas.width;
+        var height = canvas.height;
+        var center = this.center;
+        var dx = width / (this.zoom * 2);
+        var dy = height / (this.zoom * 2);
+        return new Coordinate(new Vector(center.sec.x, center.sec.y),
+            new Vector(center.pos.x + dx, center.pos.y + dy)).normalize();
     };
 
     View.prototype.changeZoom = function(amount) {
