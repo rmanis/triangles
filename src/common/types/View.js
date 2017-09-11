@@ -131,7 +131,7 @@ define([
     };
 
     View.prototype.changeZoom = function(amount) {
-        var newZoom = this.zoom * 1.0 + amount * this.scroolZoomMultiplier;
+        var newZoom = this.zoom * (1.0 + amount * this.scroolZoomMultiplier);
         if (newZoom > this.maxZoom) {
             this.zoom = this.maxZoom;
         } else if (newZoom < this.minZoom) {
