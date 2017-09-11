@@ -37,12 +37,12 @@ define([
 
         this.spaceView.interest(this);
 
-        this._mousedownCallback = this.mousedown.bind(this);
-        this._mouseupCallback = this.mouseup.bind(this);
+        this._mousedown = this.mousedown.bind(this);
+        this._mouseup = this.mouseup.bind(this);
         this.canvas.addEventListener("mousedown",
-            this._mousedownCallback, true);
+            this._mousedown, true);
         this.canvas.addEventListener("mouseup",
-            this._mouseupCallback, true);
+            this._mouseup, true);
     };
 
     SectorView.prototype.render = function() {

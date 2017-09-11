@@ -13,9 +13,10 @@ define([
         this.context = null;
         this.view = new View(this);
 
-        this.view.minZoom = 0.01;
+        this.view.minZoom = 0.0075;
+        this.view.maxZoom = 0.075;
         this.view.zoom = 0.05;
-        this.margin = 25;
+        this.margin = 1;
 
         this.clickCoord = null;
         this.selectedSector = null;
@@ -40,14 +41,17 @@ define([
         this.context.translate(this.canvas.width / 2,
             this.canvas.height / 2);
 
-        this._mousedownCallback = this.mousedown.bind(this);
-        this._mouseupCallback = this.mouseup.bind(this);
-        this._mousemoveCallback = this.mousemove.bind(this);
+        this._mousedown = this.mousedown.bind(this);
+        this._mouseup = this.mouseup.bind(this);
+        this._mousemove = this.mousemove.bind(this);
+        this._mousewheel = this.mousewheel.bind(this);
 
         this.canvas.addEventListener("mousedown",
-            this._mousedownCallback, true);
+            this._mousedown, true);
         this.canvas.addEventListener("mouseup",
-            this._mouseupCallback, true);
+            this._mouseup, true);
+        this.canvas.addEventListener("mousewheel",
+            this._mousewheel, true);
     };
 
     SpaceView.prototype.resizeCanvas = function() {
@@ -148,12 +152,12 @@ define([
     SpaceView.prototype.mousedown = function(e) {
         // pointStart(e);
         this.clickCoord = this.coordinateForEvent(e);
-        this.canvas.addEventListener("mousemove", this._mousemoveCallback);
+        this.canvas.addEventListener("mousemove", this._mousemove);
         e.stopPropagation();
     };
 
     SpaceView.prototype.mouseup = function(e) {
-        this.canvas.removeEventListener("mousemove", this._mousemoveCallback);
+        this.canvas.removeEventListener("mousemove", this._mousemove);
 
         // if not moved
         var coord = this.coordinateForEvent(e);
@@ -170,6 +174,10 @@ define([
         this.view.center.pos.x -= movex;
         this.view.center.pos.y -= movey;
         this.view.center.normalize();
+    };
+
+    SpaceView.prototype.mousewheel = function(e) {
+        this.view.changeZoom(e.wheelDelta);
     };
 
     SpaceView.prototype.interest = function(listener) {
