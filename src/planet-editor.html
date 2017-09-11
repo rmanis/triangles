@@ -43,12 +43,39 @@
         border: 1px solid black;
         overflow: scroll;
       }
+
+      #propertyTable {
+        margin: 10px;
+      }
     </style>
   </head>
   <body>
     <canvas id="spaceGrid" width="640px" height="480px"></canvas>
     <canvas id="sectorView" width="400px" height="400px"></canvas>
-    <div id="propertyInputs"></div>
+    <div id="propertyInputs">
+      <table id="propertyTable">
+        <tr>
+          <td>id</td>
+          <td><input id="idInput"></input></td>
+        </tr>
+        <tr>
+          <td>x</td>
+          <td><input id="xInput"></input></td>
+        </tr>
+        <tr>
+          <td>y</td>
+          <td><input id="yInput"></input></td>
+        </tr>
+        <tr>
+          <td>radius</td>
+          <td><input id="RadiusInput"></input></td>
+        </tr>
+        <tr>
+          <td>mass</td>
+          <td><input id="massInput"></input></td>
+        </tr>
+      </table>
+    </div>
     <textarea id="planetData"></textarea>
 
     <script data-main="PlanetEdit" src="require.js"></script>

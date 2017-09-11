@@ -40,14 +40,14 @@ define([
         this.context.translate(this.canvas.width / 2,
             this.canvas.height / 2);
 
-        this.mousedownCallback = this.mousedown.bind(this);
-        this.mouseupCallback = this.mouseup.bind(this);
-        this.mousemoveCallback = this.mousemove.bind(this);
+        this._mousedownCallback = this.mousedown.bind(this);
+        this._mouseupCallback = this.mouseup.bind(this);
+        this._mousemoveCallback = this.mousemove.bind(this);
 
         this.canvas.addEventListener("mousedown",
-            this.mousedownCallback, true);
+            this._mousedownCallback, true);
         this.canvas.addEventListener("mouseup",
-            this.mouseupCallback, true);
+            this._mouseupCallback, true);
     };
 
     SpaceView.prototype.resizeCanvas = function() {
@@ -120,7 +120,7 @@ define([
         this.context.stroke();
 
         this.context.strokeStyle = stroke;
-        this.fillStyle = fill;
+        this.context.fillStyle = fill;
 
         for (var i in planets) {
             this.renderPlanet(planets[i]);
@@ -148,12 +148,12 @@ define([
     SpaceView.prototype.mousedown = function(e) {
         // pointStart(e);
         this.clickCoord = this.coordinateForEvent(e);
-        this.canvas.addEventListener("mousemove", this.mousemoveCallback);
+        this.canvas.addEventListener("mousemove", this._mousemoveCallback);
         e.stopPropagation();
     };
 
     SpaceView.prototype.mouseup = function(e) {
-        this.canvas.removeEventListener("mousemove", this.mousemoveCallback);
+        this.canvas.removeEventListener("mousemove", this._mousemoveCallback);
 
         // if not moved
         var coord = this.coordinateForEvent(e);
