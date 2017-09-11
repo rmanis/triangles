@@ -17,6 +17,20 @@ define([
         this.margin = 25;
 
         this.clickCoord = null;
+        this.selectedSector = null;
+
+        this.listeners = [];
+
+        this.styles = {
+            selectedStrokePlanets   : "#FF0000",
+            selectedStrokeEmpty     : "#220000",
+            unselectedStrokePlanets : "#222222",
+            unselectedStrokeEmpty   : "#222222",
+            selectedFillPlanets     : "#FF0000",
+            selectedFillEmpty       : "#FFFFFF",
+            unselectedFillPlanets   : "#DD2222",
+            unselectedFillEmpty     : "#DDDDDD",
+        };
     };
 
     SpaceView.prototype.initialize = function() {
@@ -70,18 +84,42 @@ define([
         var botRight = this.view.project(new Coordinate(new Vector(x, y),
             new Vector(Constants.sectorSize - margin, Constants.sectorSize - margin)));
 
+        var stroke = this.context.strokeStyle;
+        var fill = this.context.fillStyle;
+
         this.context.beginPath();
         this.context.moveTo(topLeft.x, topLeft.y);
         this.context.lineTo(topLeft.x, botRight.y);
         this.context.lineTo(botRight.x, botRight.y);
         this.context.lineTo(botRight.x, topLeft.y);
         this.context.closePath();
-        this.context.stroke();
 
         var planets = this.planets.planetsInSector(x, y);
-        if (planets && Object.keys(planets).length > 0) {
-            this.context.fill();
+        var planetsPresent = planets && Object.keys(planets).length > 0;
+        var selected = this.selectedSector && this.selectedSector.x == x && this.selectedSector.y == y;
+        if (planetsPresent) {
+            if (selected) {
+                this.context.strokeStyle = this.styles.selectedStrokePlanets;
+                this.context.fillStyle = this.styles.selectedFillPlanets;
+            } else {
+                this.context.strokeStyle = this.styles.unselectedStrokePlanets;
+                this.context.fillStyle = this.styles.unselectedFillPlanets;
+            }
+        } else {
+            if (selected) {
+                this.context.strokeStyle = this.styles.selectedStrokeEmpty;
+                this.context.fillStyle = this.styles.selectedFillEmpty;
+            } else {
+                this.context.strokeStyle = this.styles.unselectedStrokeEmpty;
+                this.context.fillStyle = this.styles.unselectedFillEmpty;
+            }
         }
+
+        this.context.fill();
+        this.context.stroke();
+
+        this.context.strokeStyle = stroke;
+        this.fillStyle = fill;
     };
 
     SpaceView.prototype.coordinateForEvent = function(e) {
@@ -105,7 +143,10 @@ define([
         // if not moved
         var coord = this.coordinateForEvent(e);
         if (coord.equals(this.clickCoord)) {
-            console.log("Regular click");
+            this.selectedSector = this.clickCoord.sec;
+            for (var i in this.listeners) {
+                this.listeners[i].sectorSelected(this.selectedSector);
+            }
         }
     };
 
@@ -116,6 +157,10 @@ define([
         this.view.center.pos.x -= movex;
         this.view.center.pos.y -= movey;
         this.view.center.normalize();
+    };
+
+    SpaceView.prototype.interest = function(listener) {
+        this.listeners.push(listener);
     };
 
     return SpaceView;

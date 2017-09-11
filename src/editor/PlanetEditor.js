@@ -24,6 +24,7 @@ define([
         this.spaceView      = new SpaceView(document.getElementById('spaceGrid'), this.planets);
         this.spaceView.initialize();
         this.sectorView     = new SectorView(document.getElementById('sectorView'), this.planets, this.spaceView);
+        this.sectorView.initialize();
         this.propertyInputs = new PropertyInputs(document.getElementById('propertyInputs'), this.planets, this.propertyInputs);
         this.dataTextarea   = new DataView(document.getElementById('planetData'), this.planets);
     };
