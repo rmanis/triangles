@@ -55,7 +55,7 @@ module.exports = function(grunt) {
                 options : {
                     baseUrl : 'src',
                     name : 'editor/PlanetEdit',
-                    optimize : 'none',
+                    optimize : 'uglify',
                     mainConfigFile : 'config/requireconfig.js',
                     out : 'build/PlanetEdit.js',
                 }
