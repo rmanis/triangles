@@ -11,6 +11,8 @@ define([
         this.planets = planets;
         this.sectorView = sectorView;
 
+        this.selectedPlanetId = null;
+
         this.idInput = null;
         this.xInput = null;
         this.yInput = null;
@@ -46,6 +48,7 @@ define([
         } else {
             this.fillForm(null);
         }
+        this.selectedPlanetId = id;
     };
 
     PropertyInputs.prototype.fillForm = function(planet) {
@@ -65,7 +68,7 @@ define([
     };
 
     PropertyInputs.prototype.pullForm = function() {
-        var id = this.sectorView.selectedPlanetId;
+        var id = this.selectedPlanetId;
         if (!id) {
             return;
         }
@@ -97,6 +100,8 @@ define([
     };
 
     PropertyInputs.prototype.deleteSelectedPlanet = function(e) {
+        this.planets.deletePlanet(this.selectedPlanetId);
+        this.fillForm(null);
     };
 
     PropertyInputs.prototype.commitSelectedPlanet = function(e) {

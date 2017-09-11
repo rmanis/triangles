@@ -68,5 +68,20 @@ define([
 
     };
 
+    Planets.prototype.deletePlanet = function(id) {
+        var planet = this.planets[id];
+        if (planet) {
+            var key = planet.coord.toTopicSubString();
+            delete this.planets[id];
+            var sector = this.positionToPlanetArray[key];
+            if (sector) {
+                delete sector[planet.id];
+                this.listeners.map(function(l) {
+                    l.planetDeleted(planet);
+                });
+            }
+        }
+    };
+
     return Planets;
 });
