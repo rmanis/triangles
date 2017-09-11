@@ -24,20 +24,31 @@ define([
     };
 
     PropertyInputs.prototype.planetSelected = function(id) {
-        var planet = this.planets.planets[id];
+        if (id) {
+            var planet = this.planets.planets[id];
 
-        if (planet) {
-            this.fillForm(planet);
+            if (planet) {
+                this.fillForm(planet);
+            }
+        } else {
+            this.fillForm(null);
         }
     };
 
     PropertyInputs.prototype.fillForm = function(planet) {
-        console.log(planet);
-        this.idInput.value = planet.id;
-        this.xInput.value = planet.coord.pos.x;
-        this.yInput.value = planet.coord.pos.y;
-        this.radiusInput.value = planet.radius;
-        this.massInput.value = planet.mass;
+        if (planet) {
+            this.idInput.value = planet.id;
+            this.xInput.value = planet.coord.pos.x;
+            this.yInput.value = planet.coord.pos.y;
+            this.radiusInput.value = planet.radius;
+            this.massInput.value = planet.mass;
+        } else {
+            this.idInput.value = "";
+            this.xInput.value = "";
+            this.yInput.value = "";
+            this.radiusInput.value = "";
+            this.massInput.value = "";
+        }
     };
 
     return PropertyInputs;

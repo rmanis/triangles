@@ -56,7 +56,7 @@ define([], function() {
     };
 
     Vector.prototype.equals = function(v) {
-        return this.x == v.x && this.y == v.y;
+        return v && this.x == v.x && this.y == v.y;
     };
 
     Vector.prototype.toTopicSubString = function() {

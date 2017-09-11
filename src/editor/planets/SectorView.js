@@ -90,13 +90,16 @@ define([
     };
 
     SectorView.prototype.sectorSelected = function(sector) {
-        this.sector = sector;
-        var mid = Constants.sectorSize / 2;
-        this.view.center = new Coordinate(sector, new Vector(mid, mid));
+        if (sector && !sector.equals(this.sector)) {
+            this.sector = sector;
+            var mid = Constants.sectorSize / 2;
+            this.view.center = new Coordinate(sector, new Vector(mid, mid));
+            this.selectPlanet(null);
+        }
     };
 
     SectorView.prototype.selectPlanet = function(id) {
-        if (id == null || this.planets.planets[id]) {
+        if (id === null || this.planets.planets[id]) {
             this.selectedPlanetId = id;
             this.notifyListeners();
         }
@@ -129,7 +132,7 @@ define([
             var r2 = p.radius * p.radius;
             var relative = new Vector(p.coord.pos.x - coord.pos.x, p.coord.pos.y - coord.pos.y);
             if (r2 > relative.lengthSquared()) {
-                toSelect = p.id
+                toSelect = p.id;
             }
         }
         this.selectPlanet(toSelect);
