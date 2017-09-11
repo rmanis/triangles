@@ -1,10 +1,11 @@
 
 define([
     'common/Constants',
+    'common/Math',
     'common/types/Coordinate',
     'common/types/Vector',
     'common/types/View',
-], function(Constants, Coordinate, Vector, View) {
+], function(Constants, Math, Coordinate, Vector, View) {
 
     var SpaceView = function(element, planets) {
         this.planets = planets;
@@ -23,12 +24,12 @@ define([
 
         this.styles = {
             selectedStrokePlanets   : "#FF0000",
-            selectedStrokeEmpty     : "#220000",
+            selectedStrokeEmpty     : "#000000",
             unselectedStrokePlanets : "#222222",
             unselectedStrokeEmpty   : "#222222",
             selectedFillPlanets     : "#FF0000",
             selectedFillEmpty       : "#FFFFFF",
-            unselectedFillPlanets   : "#DD2222",
+            unselectedFillPlanets   : "#AA2222",
             unselectedFillEmpty     : "#DDDDDD",
         };
     };
@@ -84,8 +85,8 @@ define([
         var botRight = this.view.project(new Coordinate(new Vector(x, y),
             new Vector(Constants.sectorSize - margin, Constants.sectorSize - margin)));
 
-        var stroke = this.context.strokeStyle;
-        var fill = this.context.fillStyle;
+        var stroke = this.context.strokeStyle || "#000000";
+        var fill = this.context.fillStyle || "#FFFFFF";
 
         this.context.beginPath();
         this.context.moveTo(topLeft.x, topLeft.y);
@@ -120,6 +121,20 @@ define([
 
         this.context.strokeStyle = stroke;
         this.fillStyle = fill;
+
+        for (var i in planets) {
+            this.renderPlanet(planets[i]);
+        }
+    };
+
+    SpaceView.prototype.renderPlanet = function(planet) {
+        var radius = planet.radius * this.view.zoom;
+        var center = this.view.project(planet.coord);
+
+        this.context.beginPath();
+        this.context.arc(center.x, center.y, radius, 0, Math.TWO_PI);
+        this.context.closePath();
+        this.context.stroke();
     };
 
     SpaceView.prototype.coordinateForEvent = function(e) {
