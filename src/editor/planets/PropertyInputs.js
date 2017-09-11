@@ -78,8 +78,8 @@ define([
             p.id = this.idInput.value;
             p.coord.pos.x = Number.parseInt(this.xInput.value);
             p.coord.pos.y = Number.parseInt(this.yInput.value);
-            p.coord.radius = Number.parseInt(this.radiusInput.value);
-            p.coord.radius = Number.parseInt(this.massInput.value);
+            p.radius = Number.parseInt(this.radiusInput.value);
+            p.mass = Number.parseInt(this.massInput.value);
             this.planets.addPlanet(p);
         }
     };
