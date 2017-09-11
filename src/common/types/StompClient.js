@@ -1,9 +1,11 @@
 
-define(['common/types/Ship',
+define([
+    'common/Constants',
+    'common/types/Ship',
     'common/types/Serialization',
     'common/types/Coordinate',
     'common/types/Vector',
-], function(Ship, Serialization, Coordinate, Vector) {
+], function(Constants, Ship, Serialization, Coordinate, Vector) {
     var stomp = Stomp;
 
     var Client = function(url, game) {
@@ -256,8 +258,10 @@ define(['common/types/Ship',
         var subs = [];
         var key;
 
-        for (i = x - 1; i <= x + 1; i++) {
-            for (j = y - 1; j <= y + 1; j++) {
+        var radius = Constants.broadcastRadius;
+
+        for (i = x - radius; i <= x + radius; i++) {
+            for (j = y - radius; j <= y + radius; j++) {
                 subs.push(this.positionTopicForSector(i, j));
             }
         }
