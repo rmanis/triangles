@@ -98,6 +98,7 @@ define([
     SectorView.prototype.selectPlanet = function(id) {
         if (id == null || this.planets.planets[id]) {
             this.selectedPlanetId = id;
+            this.notifyListeners();
         }
     };
 
@@ -134,14 +135,14 @@ define([
         this.selectPlanet(toSelect);
     };
 
+    SectorView.prototype.interest = function(listener) {
+        this.listeners.push(listener);
+    };
+
     SectorView.prototype.notifyListeners = function() {
         for (var i in this.listeners) {
             this.listeners[i].planetSelected(this.selectedPlanetId);
         }
-    };
-
-    SectorView.prototype.interest = function(listener) {
-        this.listeners.push(listener);
     };
 
     return SectorView;

@@ -159,9 +159,7 @@ define([
         var coord = this.coordinateForEvent(e);
         if (coord.equals(this.clickCoord)) {
             this.selectedSector = this.clickCoord.sec;
-            for (var i in this.listeners) {
-                this.listeners[i].sectorSelected(this.selectedSector);
-            }
+            this.notifyListeners();
         }
     };
 
@@ -176,6 +174,12 @@ define([
 
     SpaceView.prototype.interest = function(listener) {
         this.listeners.push(listener);
+    };
+
+    SpaceView.prototype.notifyListeners = function() {
+        for (var i in this.listeners) {
+            this.listeners[i].sectorSelected(this.selectedSector);
+        }
     };
 
     return SpaceView;
