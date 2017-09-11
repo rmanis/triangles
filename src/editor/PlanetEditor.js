@@ -28,6 +28,7 @@ define([
         this.propertyInputs = new PropertyInputs(document.getElementById('propertyInputs'), this.planets, this.sectorView);
         this.propertyInputs.initialize();
         this.dataTextarea   = new DataView(document.getElementById('planetData'), this.planets);
+        this.dataTextarea.initialize();
     };
 
     PlanetEditor.prototype.render = function(dt) {
