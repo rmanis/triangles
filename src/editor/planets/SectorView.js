@@ -67,8 +67,7 @@ define([
         var radius = planet.radius * this.view.zoom;
         var center = this.view.project(planet.coord);
 
-        var stroke = this.context.strokeStyle || "#000000";
-        var fill = this.context.fillStyle || "#FFFFFF";
+        this.context.save();
 
         if (planet.id == this.selectedPlanetId) {
             this.context.strokeStyle = this.styles.selectedStroke;
@@ -84,8 +83,7 @@ define([
         this.context.fill();
         this.context.stroke();
 
-        this.context.strokeStyle = stroke;
-        this.context.fillStyle = fill;
+        this.context.restore();
 
     };
 

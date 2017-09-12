@@ -89,8 +89,7 @@ define([
         var botRight = this.view.project(new Coordinate(new Vector(x, y),
             new Vector(Constants.sectorSize - margin, Constants.sectorSize - margin)));
 
-        var stroke = this.context.strokeStyle || "#000000";
-        var fill = this.context.fillStyle || "#FFFFFF";
+        this.context.save();
 
         this.context.beginPath();
         this.context.moveTo(topLeft.x, topLeft.y);
@@ -123,8 +122,7 @@ define([
         this.context.fill();
         this.context.stroke();
 
-        this.context.strokeStyle = stroke;
-        this.context.fillStyle = fill;
+        this.context.restore();
 
         for (var i in planets) {
             this.renderPlanet(planets[i]);
