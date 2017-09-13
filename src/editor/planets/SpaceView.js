@@ -61,6 +61,7 @@ define([
         // draw the sectors we can see
         var xmin, xmax;
         var ymin, ymax;
+        var x, y;
 
         var topleft = this.view.topLeft(this.canvas);
         var bottomRight = this.view.bottomRight(this.canvas);
@@ -75,9 +76,14 @@ define([
         ymin = topleft.sec.y;
         ymax = bottomRight.sec.y;
 
-        for (var y = ymin; y <= ymax; y++) {
-            for (var x = xmin; x <= xmax; x++) {
+        for (y = ymin; y <= ymax; y++) {
+            for (x = xmin; x <= xmax; x++) {
                 this.renderSector(x, y);
+            }
+        }
+        for (y = ymin; y <= ymax; y++) {
+            for (x = xmin; x <= xmax; x++) {
+                this.renderPlanetsInSector(x, y);
             }
         }
     };
@@ -123,10 +129,17 @@ define([
         this.context.stroke();
 
         this.context.restore();
+    };
 
+    SpaceView.prototype.renderPlanetsInSector = function(x,y) {
+        this.context.save();
+
+        var planets = this.planets.planetsInSector(x, y);
         for (var i in planets) {
             this.renderPlanet(planets[i]);
         }
+
+        this.context.restore();
     };
 
     SpaceView.prototype.renderPlanet = function(planet) {
