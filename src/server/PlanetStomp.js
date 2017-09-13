@@ -11,7 +11,6 @@ define([
         StompClient.call(this);
 
         this.planets = planets;
-        this.client = null;
         this.ships = {};
     };
     PlanetStomp.prototype = Object.create(StompClient.prototype);
@@ -27,6 +26,11 @@ define([
         this.id = id;
         this.planet = planet;
         this.lastBroadcast = new Date();
+    };
+
+    PlanetStomp.prototype.initialize = function() {
+        StompClient.prototype.initialize.call(this);
+        this.planets.interest(this);
     };
 
     PlanetStomp.prototype.connect = function() {
@@ -99,6 +103,19 @@ define([
         }
     };
 
+    PlanetStomp.prototype.subscribePlanetSector = function(planet) {
+        var suffix = planet.coord.toTopicSubString();
+        var topic = StompClient.positionTopicPrefix + suffix;
+        this.subscribe(topic, this.shipReceived.bind(this));
+    };
+
+    PlanetStomp.prototype.planetAdded = function(planetId) {
+        var planet = this.planets.get(planetId);
+        if (planet) {
+            this.subscribePlanetSector(planet);
+        }
+    };
+
     PlanetStomp.prototype.planetUpdated = function(msg) {
         var data = JSON.parse(msg.body);
         if (data.action === 'delete') {
@@ -108,6 +125,9 @@ define([
             var p = Planet.fromAttributes(data.planet);
             this.planets.addPlanet(p);
         }
+    };
+
+    PlanetStomp.prototype.planetDeleted = function(planet) {
     };
 
     PlanetStomp.prototype.addShip = function(id, ship) {

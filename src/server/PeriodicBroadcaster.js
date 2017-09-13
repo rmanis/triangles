@@ -10,6 +10,7 @@ define([
 
     PeriodicBroadcaster.prototype.initialize = function() {
         this.stomp.interest(this);
+        this.planets.interest(this);
         for (var planetId in this.planets.planets) {
             var planet = this.planets.planets[planetId];
             this.broadcastPlanetScheduled(planet);
@@ -31,11 +32,13 @@ define([
         this.timeouts[planet.id] = setTimeout(this.broadcastPlanetScheduled.bind(this), delay, planet);
     };
 
-    PeriodicBroadcaster.prototype.planetAdded = function(planet) {
+    PeriodicBroadcaster.prototype.planetAdded = function(planetId) {
+        var planet = this.planets.get(planetId);
         this.broadcastPlanetScheduled(planet);
     };
 
-    PeriodicBroadcaster.prototype.planetUpdated = function(planet) {
+    PeriodicBroadcaster.prototype.planetUpdated = function(planetId) {
+        var planet = this.planets.get(planetId);
         this.broadcastPlanetScheduled(planet);
     };
 
@@ -44,6 +47,18 @@ define([
         if (timeout) {
             clearTimeout(timeout);
         }
+    };
+
+    PeriodicBroadcaster.prototype.onConnect = function() {
+        // Start timeouts?
+    };
+
+    PeriodicBroadcaster.prototype.onError = function(e) {
+        // Stop timeouts
+    };
+
+    PeriodicBroadcaster.prototype.onDisconnect = function() {
+        // Stop timeouts
     };
 
     return PeriodicBroadcaster;

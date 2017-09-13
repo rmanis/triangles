@@ -56,7 +56,7 @@ define([
 
             this.planets[planet.id] = planet;
             this.listeners.map(function(l) {
-                l.planetAdded();
+                l.planetAdded(planet.id);
             });
         } else {
             var oldPlanet = this.planets[planet.id];
