@@ -46,6 +46,8 @@ define([
             var topic = this.positionTopicPrefix + p;
             this.subscribe(topic, this.shipReceived.bind(this));
         }
+
+        this.subscribe(StompClient.planetRequestTopic, this.requestReceived.bind(this));
     };
 
     PlanetStomp.prototype.subscribe = function(topic, callback) {
@@ -94,6 +96,17 @@ define([
             ship = Serialization.deserializeShip(message.body);
             this.addShip(id, ship);
             this.informShip(ship);
+        }
+    };
+
+    PlanetStomp.prototype.requestReceived = function(msg) {
+
+        var destination = msg.headers['reply-to'];
+
+        for (var i in this.planets.planets) {
+            var p = this.planets.planets[i];
+            var headers = { planetId : p.id };
+            this.stomp.send(destination, headers, Serialization.serializePlanet(p));
         }
     };
 

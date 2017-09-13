@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>Editor</title>
+    <script src="stomp.min.js"></script>
     <style type="text/css">
       * { margin:0; padding: 0; }
       html, body {
@@ -36,10 +37,10 @@
 
       #propertyInputs {
         position: fixed;
-        right: 10px;
-        top: 420;
+        right: 70px;
+        top: 420px;
         bottom: 10px;
-        width: 400px;
+        width: 340px;
         border: 1px solid black;
         overflow: scroll;
       }
@@ -47,7 +48,37 @@
       #propertyTable {
         margin: 10px;
       }
+
+      #controlPanel {
+        position: fixed;
+        right: 10px;
+        top: 420px;
+        bottom: 10px;
+        width: 50px;
+        border: 1px solid black;
+      }
+
+      div.statusButton {
+        position: fixed;
+        width: 20px;
+        height: 20px;
+        border: 1px solid black;
+        margin: 10px;
+      }
+
+      .greenback {
+        background-color: #22BB22;
+      }
+
+      .redback {
+        background-color: #BB2222;
+      }
     </style>
+    <script>
+      function debug(text) {
+        console.log(text);
+      }
+    </script>
   </head>
   <body>
     <canvas id="spaceGrid" width="640px" height="480px"></canvas>
@@ -87,6 +118,8 @@
           <td><a href="#" id="commitPlanet">Commit</a></td>
         </tr>
       </table>
+    </div>
+    <div id="controlPanel">
     </div>
     <textarea id="planetData"></textarea>
 

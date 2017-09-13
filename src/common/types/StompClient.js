@@ -281,6 +281,7 @@ define([
 
     Client.positionTopicPrefix = '/topic/position.';
     Client.planetTopicPrefix = '/topic/position.';
+    Client.planetRequestTopic = '/topic/planets.request';
 
     return Client;
 });
