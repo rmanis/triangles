@@ -8,6 +8,7 @@ define([
 
         this.connectListeners = [];
         this.errorListeners = [];
+        this.disconnectListeners = [];
     };
 
     GenericStomp.prototype.initialize = function() {
@@ -30,6 +31,12 @@ define([
             this.onError.bind(this));
     };
 
+    GenericStomp.prototype.disconnect = function() {
+        if (this.client) {
+            this.client.disconnect(this.onDisconnect.bind(this));
+        }
+    };
+
     GenericStomp.prototype.isConnected = function() {
         return this.client && this.client.connected;
     };
@@ -41,7 +48,13 @@ define([
     };
 
     GenericStomp.prototype.onError = function(e) {
-        for (var i in this.connectListeners) {
+        for (var i in this.errorListeners) {
+            this.errorListeners[i].onError(e);
+        }
+    };
+
+    GenericStomp.prototype.onDisconnect = function(e) {
+        for (var i in this.disconnectListeners) {
             this.errorListeners[i].onError(e);
         }
     };
@@ -62,9 +75,20 @@ define([
         this.errorListeners.push(l);
     };
 
+    GenericStomp.prototype.addOnDisconnect = function(l) {
+        this.disconnectListeners.push(l);
+    };
+
+    GenericStomp.prototype.interest = function(l) {
+        this.addOnConnect(l);
+        this.addOnError(l);
+        this.addOnDisconnect(l);
+    };
+
     GenericStomp.positionTopicPrefix = '/topic/position.';
-    GenericStomp.planetTopicPrefix = '/topic/position.';
-    GenericStomp.planetRequestTopic = '/topic/planets.request';
+    GenericStomp.planetTopicPrefix   = '/topic/position.';
+    GenericStomp.planetUpdateTopic   = '/topic/planets.update';
+    GenericStomp.planetRequestTopic  = '/topic/planets.request';
     GenericStomp.planetResponseQueue = '/temp-queue/planets.response';
 
     return GenericStomp;

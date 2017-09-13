@@ -2,38 +2,23 @@
 require([
     'common/Constants',
     'common/types/Planets',
+    'server/PeriodicBroadcaster',
     'server/PlanetStomp',
-], function(Constants, Planets, PlanetStomp) {
+], function(Constants, Planets, PeriodicBroadcaster, PlanetStomp) {
 
     var planets = new Planets();
     var stomp = new PlanetStomp(planets);
-
-    var broadcastPlanetScheduled = function(planet) {
-
-        var lastBroadcast = planet.lastBroadcast;
-        var now = new Date();
-        var diff = now - lastBroadcast;
-
-        if (diff > Constants.planetBroadcastDelay) {
-            stomp.broadcastPlanet(planet);
-        }
-
-        var delay = planet.lastBroadcast + Constants.planetBroadcastDelay - now;
-
-        setTimeout(broadcastPlanetScheduled, delay, planet);
-    };
+    var broadcaster = new PeriodicBroadcaster(planets, stomp);
 
     planets.initialize();
     stomp.initialize();
+    stomp.connect();
+    broadcaster.initialize();
     debug('initialized');
 
-    for (var planetId in planets.planets) {
-        var planet = planets.planets[planetId];
-        broadcastPlanetScheduled(planet);
-    }
-
     return {
-        planets: planets,
-        stomp: stomp,
+        planets     : planets,
+        stomp       : stomp,
+        broadcaster : broadcaster,
     };
 });

@@ -280,8 +280,10 @@ define([
     };
 
     Client.positionTopicPrefix = '/topic/position.';
-    Client.planetTopicPrefix = '/topic/position.';
-    Client.planetRequestTopic = '/topic/planets.request';
+    Client.planetTopicPrefix   = '/topic/position.';
+    Client.planetUpdateTopic   = '/topic/planets.update';
+    Client.planetRequestTopic  = '/topic/planets.request';
+    Client.planetResponseQueue = '/temp-queue/planets.response';
 
     return Client;
 });

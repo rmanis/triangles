@@ -83,5 +83,10 @@ define([
         }
     };
 
+    Planets.prototype.get = function(id) {
+        var planet = this.planets[id];
+        return planet || null;
+    };
+
     return Planets;
 });

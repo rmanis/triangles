@@ -5,19 +5,25 @@ define([
 ], function(Ship, Planet) {
     var Serialization = {
 
-        serializeAttributes : function(object, attributes) {
+        serializeable : function(object, attributes) {
             var data = {};
             var i;
             for (i in attributes) {
                 var key = attributes[i];
                 data[key] = object[key];
             }
+            return data;
+        },
+
+        serializeAttributes : function(object, attributes) {
+            var data = Serialization.serializeable(object, attributes);
             return JSON.stringify(data);
         },
 
+        shipAttributes : ['pos','vx','vy','theta','omega'],
         serializeShip : function(ship) {
-            var attributes = ['pos','vx','vy','theta','omega'];
-            return Serialization.serializeAttributes(ship, attributes);
+            return Serialization.serializeAttributes(ship,
+                Serialization.shipAttributes);
         },
 
         deserializeShip : function(text) {
@@ -25,9 +31,10 @@ define([
             return new Ship(data);
         },
 
+        planetAttributes : ['id', 'coord', 'radius', 'mass'],
         serializePlanet : function(planet) {
-            var attributes = ['id', 'coord', 'radius', 'mass'];
-            return Serialization.serializeAttributes(planet, attributes);
+            return Serialization.serializeAttributes(planet,
+                Serialization.planetAttributes);
         },
 
         deserializePlanet : function(text) {

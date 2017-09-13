@@ -6,8 +6,9 @@ define([
     'common/types/Planet',
     'common/types/Vector',
 ], function(Constants, Guid, Coordinate, Planet, Vector) {
-    var PropertyInputs = function(element, planets, sectorView) {
+    var PropertyInputs = function(element, stomp, planets, sectorView) {
         this.element = element;
+        this.stomp = stomp;
         this.planets = planets;
         this.sectorView = sectorView;
 
@@ -102,10 +103,12 @@ define([
     PropertyInputs.prototype.deleteSelectedPlanet = function(e) {
         this.planets.deletePlanet(this.selectedPlanetId);
         this.fillForm(null);
+        this.stomp.sendPlanetDelete(this.selectedPlanetId);
     };
 
     PropertyInputs.prototype.commitSelectedPlanet = function(e) {
         this.pullForm();
+        this.stomp.sendPlanetUpdate(this.selectedPlanetId);
     };
 
     return PropertyInputs;

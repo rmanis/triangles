@@ -15,10 +15,10 @@ define([
         var updated = false;
 
         if (!this.coord.equals(data.coord)) {
-            this.coord.sec.x = data.sec.x;
-            this.coord.sec.y = data.sec.y;
-            this.coord.pos.x = data.pos.x;
-            this.coord.pos.y = data.pos.y;
+            this.coord.sec.x = data.coord.sec.x;
+            this.coord.sec.y = data.coord.sec.y;
+            this.coord.pos.x = data.coord.pos.x;
+            this.coord.pos.y = data.coord.pos.y;
             updated = true;
         }
         if (this.radius != data.radius) {
@@ -30,6 +30,10 @@ define([
             updated = true;
         }
         return updated;
+    };
+
+    Planet.fromAttributes = function(attrs) {
+        return new Planet(attrs.id, attrs.coord, attrs.radius, attrs.mass);
     };
 
     return Planet;

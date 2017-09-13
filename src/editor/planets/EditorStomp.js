@@ -1,8 +1,9 @@
 
 define([
+    'common/Messaging',
     'common/types/GenericStomp',
     'common/types/Serialization',
-], function(StompClient, Serialization) {
+], function(Messaging, StompClient, Serialization) {
 
     var EditorStomp = function(planets) {
         StompClient.call(this);
@@ -37,8 +38,23 @@ define([
     EditorStomp.prototype.planetReceived = function(msg) {
         var planet = Serialization.deserializePlanet(msg.body);
         var obj = JSON.parse(msg.body);
-        console.log(obj);
         this.planets.addPlanet(planet);
+    };
+
+    EditorStomp.prototype.sendPlanetUpdate = function(id) {
+        var planet = this.planets.get(id);
+        if (planet) {
+            var body = Messaging.planetUpdate(planet);
+            this.client.send(StompClient.planetUpdateTopic, {}, body);
+        }
+    };
+
+    EditorStomp.prototype.sendPlanetDelete = function(id) {
+        var planet = this.planets.get(id);
+        if (planet) {
+            var body = Messaging.planetDelete(planet);
+            this.client.send(StompClient.planetUpdateTopic, {}, body);
+        }
     };
 
     return EditorStomp;

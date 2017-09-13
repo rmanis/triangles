@@ -3,16 +3,19 @@ define([
     'common/types/Serialization',
     'common/types/Vector',
     'common/types/Coordinate',
-    'common/types/StompClient',
-], function(Serialization, Vector, Coordinate, StompClient) {
+    'common/types/Planet',
+    'common/types/GenericStomp',
+], function(Serialization, Vector, Coordinate, Planet, StompClient) {
 
     var PlanetStomp = function(planets) {
+        StompClient.call(this);
 
         this.planets = planets;
-        this.stomp = null;
+        this.client = null;
         this.ships = {};
-        this.positionTopicPrefix = StompClient.positionTopicPrefix;
     };
+    PlanetStomp.prototype = Object.create(StompClient.prototype);
+    PlanetStomp.prototype.constructor = PlanetStomp;
 
     var ShipRecord = function(id, ship) {
         this.shipId = id;
@@ -26,42 +29,28 @@ define([
         this.lastBroadcast = new Date();
     };
 
-    PlanetStomp.prototype.initialize = function() {
-
-        var url;
-        if (typeof window !== undefined) {
-            url = 'ws://' + window.location.hostname + ':61623';
-            this.stomp = new StompClient(url, this);
-        } else {
-            this.stomp = new StompClient('ws://localhost:61623', this);
-        }
-
-        if (this.stomp) {
-            this.stomp.connect('planets', this.onConnect.bind(this));
-        }
+    PlanetStomp.prototype.connect = function() {
+        StompClient.prototype.connect.call(this, 'planets');
     };
 
     PlanetStomp.prototype.onConnect = function() {
         for (var p in this.planets.positionToPlanetArray) {
-            var topic = this.positionTopicPrefix + p;
+            var topic = StompClient.positionTopicPrefix + p;
             this.subscribe(topic, this.shipReceived.bind(this));
         }
 
         this.subscribe(StompClient.planetRequestTopic, this.requestReceived.bind(this));
-    };
-
-    PlanetStomp.prototype.subscribe = function(topic, callback) {
-        this.stomp.subscribe(topic, 'ShipForPlanets', callback);
+        this.subscribe(StompClient.planetUpdateTopic, this.planetUpdated.bind(this));
     };
 
     PlanetStomp.prototype.broadcastPlanet = function(planet) {
-        if (this.stomp.isConnected()) {
+        if (this.isConnected()) {
             var destination = StompClient.planetTopicPrefix + planet.coord.toTopicSubString();
             var headers = {
                 planetId : planet.id,
             };
             var body = Serialization.serializePlanet(planet);
-            this.stomp.send(destination, headers, body);
+            this.send(destination, headers, body);
             planet.lastBroadcast = new Date();
         }
     };
@@ -106,7 +95,18 @@ define([
         for (var i in this.planets.planets) {
             var p = this.planets.planets[i];
             var headers = { planetId : p.id };
-            this.stomp.send(destination, headers, Serialization.serializePlanet(p));
+            this.send(destination, headers, Serialization.serializePlanet(p));
+        }
+    };
+
+    PlanetStomp.prototype.planetUpdated = function(msg) {
+        var data = JSON.parse(msg.body);
+        if (data.action === 'delete') {
+            var id = data.id;
+            this.planets.deletePlanet(id);
+        } else if (data.action === 'update') {
+            var p = Planet.fromAttributes(data.planet);
+            this.planets.addPlanet(p);
         }
     };
 

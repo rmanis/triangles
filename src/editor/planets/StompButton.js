@@ -14,8 +14,7 @@ define([
         this.element.addEventListener('click', this.onclick.bind(this));
         this.parentElement.append(this.element);
 
-        this.stomp.addOnConnect(this);
-        this.stomp.addOnError(this);
+        this.stomp.interest(this);
     };
 
     StompButton.prototype.update = function() {
@@ -37,7 +36,11 @@ define([
     };
 
     StompButton.prototype.onError = function() {
-        this.goRed();
+        this.update();
+    };
+
+    StompButton.prototype.onDisconnect = function() {
+        this.update();
     };
 
     StompButton.prototype.goGreen = function() {
